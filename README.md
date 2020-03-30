@@ -1,2 +1,2 @@
 # cs326-final-lambda
-A forum for UMass student to share their off-campus living experiences
+This is a project building a forum for UMass students to share their off-campus living experiences
