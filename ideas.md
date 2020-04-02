@@ -13,3 +13,7 @@
 #### (a). User can post their experiences, share pictures, and  make tag and rank for different off-campus living options. 
 #### (b). Users can comment on each other's post and start a discussion session below every posts.
 #### (c). Users that belong to the same housing area can form smaller group.
+The discussion section is structured like a forum - each housing area is a group, where users can create posts and others can respond in a typical thread fashion.
+
+### 3b. If we have time
+#### (a). Users looking for someone to sublet to during the summer, or looking for someone to take over their lease after they move out, can post offers for such on a publically available marketplace. Anyone wishing to take up an offer should be able to find their contact information, which should be included in the offer, and thus contact the original poster
