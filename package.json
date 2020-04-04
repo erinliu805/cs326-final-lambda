@@ -1,0 +1,29 @@
+{
+  "name": "cs326-final-lambda",
+  "version": "1.0.0",
+  "description": "This is a project building a forum for UMass students to share their off-campus living experiences",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/erinliu805/cs326-final-lambda.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/erinliu805/cs326-final-lambda/issues"
+  },
+  "homepage": "https://github.com/erinliu805/cs326-final-lambda#readme",
+  "dependencies": {
+    "level": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.0"
+  }
+}
