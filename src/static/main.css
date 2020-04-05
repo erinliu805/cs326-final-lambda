@@ -6,66 +6,12 @@ body {
   background: #6cb4f0;
 }
 
-.login {
-    background: #6cb4f0;
-    padding: 80px 0;
-  }
+icon {
+  /* <div class="icon"><svg class="bi bi-house-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
+                <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
+              </svg></div> */
+  color: rgb(244,71,107);
+}
   
-  .login form {
-    max-width: 320px;
-    width: 90%;
-    margin: 0 auto;
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 4px;
-    color: #505e6c;
-    box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-  }
-  
-  .login .icon {
-    text-align: center;
-    padding: 0 0 20px;
-    font-size: 100px;
-    color: rgb(244,71,107);
-  }
-  
-  .login form .form-control {
-    background: #f7f9fc;
-    border: none;
-    border-bottom: 1px solid #dfe7f1;
-    border-radius: 0;
-    box-shadow: none;
-    outline: none;
-    color: inherit;
-    text-indent: 8px;
-    height: 42px;
-  }
-  
-  /* log in button color */
-  .login form .btn-primary {
-    background: purple;
-    border: none;
-    border-radius: 4px;
-    padding: 11px;
-    box-shadow: none;
-    margin-top: 26px;
-    text-shadow: none;
-    outline: none !important;
-  }
-  
-  .login form .forgot {
-    display: block;
-    text-align: center;
-    font-size: 12px;
-    color: #6f7a85;
-    opacity: 0.9;
-    text-decoration: none;
-  }
-
-  .register {
-    text-align: center;
-    margin-right: auto;
-    margin-left: auto;
-    display: block;
-  }
   
