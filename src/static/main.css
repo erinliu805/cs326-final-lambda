@@ -4,6 +4,7 @@ a {
 
 body {
   background: #6cb4f0;
+  margin-top: 5rem;
 }
 
 icon {
@@ -14,4 +15,10 @@ icon {
   color: rgb(244,71,107);
 }
   
-  
+.post-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  border: 1px solid #b6b6b6;
+}

@@ -20,10 +20,17 @@ let posts = [
         'contend': 'Some random thing here',
     },
 ]
+let post = {
+    'author': 'author one',
+    'title': 'title one',
+    'contend': 'Some text here',
+}
 let http = require('http');
 let url = require('url');
-const headerText = { "Content-Type": "text/html" };
-
+const headerText = { "Content-Type": "application/json",
+                     "Access-Control-Allow-Origin": "*",
+                     "Access-Control-Allow-Headers": "*"
+                   };
 
 async function writeResponse(data, response){
     response.write(JSON.stringify(data));
@@ -37,7 +44,8 @@ server.on('request', async (request, response) => {
     console.log(response.url);
     if (request.url.endsWith('/read')){
         console.log("Sending posts");
-        await writeResponse(posts, response);
+        await writeResponse(post, response);
+        console.log(post);
     }
 
     response.end();
