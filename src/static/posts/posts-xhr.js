@@ -10,4 +10,5 @@ function readPost() {
         const j = await resp.json();
         //some bugs here
         document.getElementById("postSection").innerHTML=j['author'];
+        
     })()};

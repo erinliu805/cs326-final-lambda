@@ -33,7 +33,6 @@ icon {
 }
 
 .postbody{
-
     position: relative;
     flex-grow: 1;
 }
@@ -43,4 +42,20 @@ icon {
     margin-left: 0px;
     flex-basis: 150px;
     position: relative;
+}
+
+.profile-img {
+  height:125px;
+  width:125px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.form-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
