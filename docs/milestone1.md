@@ -58,3 +58,15 @@
 
 #### **Register**
 ![registerReal](registerReal.png)
+
+#### **Register**
+![MyprofileReal](MyprofileReal.png)
+
+#### **Register**
+![HomepageReal](HomepageReal.png)
+
+### Part 3: Breakdown and Division
+#### 
+  * Juelin Liu: Write the HTML and Javascript for posts page and user_profile page, Using bootstrap to build the top bar for all pages
+  * Alex Zhang: Write the HTML for homepage posts, adjust the main.css file
+  *Erin(Yuxin) Liu: Write the HTML for register and modify the HTML for profile page and homepage.

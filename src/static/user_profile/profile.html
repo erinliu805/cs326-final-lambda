@@ -39,29 +39,71 @@
 	  </nav>
       
       <div class="container">
-        <form action="post" class="form-section col-7">
-            <!-- user Profile Picture -->
-            <div class="form-group row">
-                <img class="profile-img"src="https://meetanentrepreneur.lu/wp-content/uploads/2019/08/profil-linkedin.jpg" alt="">
-            </div>
-            <!-- user name -->
-            <div class="form-group row">
-                <label for="userName">User Name</label>
-                <input type="text" class="form-control" id="userName">
-            </div>
+		<div class="row">
+			<div class="form-section col-3">
+				<div class="side-bar col-11">
+					<div class="form-group row">
+						<a href="../user_profile/profile.html"><h2>My profile</h2></a>
+					</div>
+					<div class="form-group row">
+						<a href="../posts/posts.html"><h2>Go to Posts</h2></a>
+					</div>
 
-            <!-- email form -->
-            <div class="form-group row">
-                <label for="userEmail">Email</label>
-                <input type="email" class="form-control" id="userEmail" placeholder="name@example.com">
-            </div>
+				</div>
+			</div>
+			<form action="post" class="form-section col-9">
+				<div class="center">
+					<h2>About Me</h2>
+					<!-- user Profile Picture -->
+					<div class="form-group row">
+						<img class="profile-img"src="https://meetanentrepreneur.lu/wp-content/uploads/2019/08/profil-linkedin.jpg" alt="">
+					</div>
+				</div>
+				
+				
+				<div class="container">
+					<div class="row">
+					  <div class="col">
+						<div class="form-group"><input class="form-control" type="username" name="username" placeholder="Username*"></div>
+					  </div>
+					  <div class="col">
+						<label>Current Housing Area*</label>
+						<select id="userCurrentHousingArea">
+							<option value="none">None</option>
+							<option value="northeast">Northeast</option>
+							<option value="southwest">Southwest</option>
+							<option value="downtown">Downtown</option>
+							<option value="northampton">Northampton</option>
+						  </select>
+					  </div>
+					  <div class="w-100"></div>
+					  <div class="col">
+						<div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email*"></div>
+						<div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password*"></div>
+						<div class="form-group"><input class="form-control" type="password-confirm" name="password-confirm" placeholder="Confirm Password*"></div>
+					  </div>
+					  <div class="col">
+						<label>Interested Housing Area*</label>
+						<select id="userInterestedHousingArea">
+							<option value="none">None</option>
+							<option value="northeast">Northeast</option>
+							<option value="southwest">Southwest</option>
+							<option value="downtown">Downtown</option>
+							<option value="northampton">Northampton</option>
+						  </select>
+					  </div>
+					</div>
+				  </div>
+				<!-- User Profile Picture -->
+				<div class="form-group row">
+					<label for="profilePicture">Profile Picture</label>
+					<input type="file" class="form-control-file" id="profilePicture">
+				</div>
+			</form>
 
-            <!-- User Profile Picture -->
-            <div class="form-group row">
-                <label for="profilePicture">Profile Picture</label>
-                <input type="file" class="form-control-file" id="profilePicture">
-            </div>
-        </form>
+		</div>
+		
+        
       </div>
 
     </div>

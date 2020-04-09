@@ -59,3 +59,19 @@ icon {
   margin-bottom: 20px;
   margin-top: 20px;
 }
+
+.side-bar {
+  background: lightblue;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
