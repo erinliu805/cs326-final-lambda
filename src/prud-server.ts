@@ -5,13 +5,13 @@ let posts = [
     {
         'author': 'author one',
         'title': 'title one',
-        'contend': 'Some text here',
+        'content': 'Some text here',
     },
 
     {
         'author': 'author two',
         'title': 'title two',
-        'contend': 'Some more text here',
+        'content': 'Some more text here',
     },
 
     {
@@ -22,8 +22,10 @@ let posts = [
 ]
 let http = require('http');
 let url = require('url');
-const headerText = { "Content-Type": "text/html" };
-
+const headerText = { "Content-Type": "application/json",
+                     "Access-Control-Allow-Origin": "*",
+                     "Access-Control-Allow-Headers": "*"
+                   };
 
 async function writeResponse(data, response){
     response.write(JSON.stringify(data));
@@ -33,11 +35,12 @@ let server = http.createServer();
 server.on('request', async (request, response) => {
     response.writeHead(200, headerText);
     let options = url.parse(request.url, true).query;
-    response.write(JSON.stringify(options));
+    //response.write(JSON.stringify(options));
     console.log(response.url);
     if (request.url.endsWith('/read')){
         console.log("Sending posts");
-        await writeResponse(posts, response);
+        await writeResponse(posts[0], response);
+        console.log(`Sending ${JSON.stringify(posts[0])} to the client`);
     }
 
     response.end();

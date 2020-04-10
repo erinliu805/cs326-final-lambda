@@ -1,32 +1,37 @@
 'use strict'
 
-// sample posts in a list of JSON
-let posts = [
+let http = require('http');
+let url = require('url');
+let mysql = require('mysql');
+const db = mysql.createConnection(
     {
-        'author': 'author one',
-        'title': 'title one',
-        'contend': 'Some text here',
-    },
+        host: 'localhost',
+        user: 'guest',
+        password: '',
+    }
+);
 
-    {
-        'author': 'author two',
-        'title': 'title two',
-        'contend': 'Some more text here',
-    },
+db.connect(function(err) {
+    if (err) {
+        createDatabase(db);
+    }
+    console.log('Mysql is connected')
+})
 
-    {
-        'author': 'author three',
-        'title': 'title three',
-        'contend': 'Some random thing here',
-    },
-]
+function createDatabase(db) {
+    let sql = 'CREATE DATABASE housing101';
+    db.query(sql, (err, response) =>{
+        if (err) throw err;
+        console.log('Database created');
+        response.send('database created');
+    })
+}
+
 let post = {
     'author': 'author one',
     'title': 'title one',
     'contend': 'Some text here',
 }
-let http = require('http');
-let url = require('url');
 const headerText = { "Content-Type": "application/json",
                      "Access-Control-Allow-Origin": "*",
                      "Access-Control-Allow-Headers": "*"
@@ -34,6 +39,7 @@ const headerText = { "Content-Type": "application/json",
 
 async function writeResponse(data, response){
     response.write(JSON.stringify(data));
+    response.end();
 }
 
 let server = http.createServer();
