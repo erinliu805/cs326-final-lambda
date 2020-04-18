@@ -1,3 +1,5 @@
+import { fstat } from "fs";
+
 let http = require('http');
 let url = require('url');
 let express = require('express');
@@ -5,34 +7,69 @@ let express = require('express');
 export class MyServer {
 
     private theDatabase;
-
-    // Server stuff: use express instead of http.createServer
-    private server = express();
+    private app = express();
     private port = 8080;
     private router = express.Router();
-
+    private fs = require('fs');
     constructor(db) {
-	this.theDatabase = db;
-	// from https://enable-cors.org/server_expressjs.html
-	this.router.use((request, response, next) => {
-	    response.header('Content-Type','application/json');
-	    response.header('Access-Control-Allow-Origin', '*');
-	    response.header('Access-Control-Allow-Headers', '*');
-	    next();
-	});
-	// Serve static pages from a particular path.
-	this.server.use('/', express.static('/static/index/index.html'));
-	//// YOUR CODE GOES HERE
-	//// HANDLE CREATE, READ, UPDATE, AND DELETE OPERATIONS
-	//// HANDLE ERRORS WITH A WILDCARD (*)
-	// Start up the counter endpoint at '/counter'.
-	// this.server.use('/counter', this.router);
-	// this.router.get('/users/:userId/create', [this.createHandler.bind(this), this.errorHandler.bind(this)]);
-	// this.router.get('/users/:userId/read', [this.errorHandler.bind(this), this.readHandler.bind(this) ]);
-	// this.router.get('/users/:userId/update', [this.errorHandler.bind(this), this.updateHandler.bind(this)]);
-	// this.router.get('/users/:userId/delete', [this.errorHandler.bind(this), this.deleteHandler.bind(this)]);
+        //this.theDatabase = db;
+        this.router.use((request, response, next) => {
+            response.header('Content-Type','application/json');
+            response.header('Access-Control-Allow-Origin', '*');
+            response.header('Access-Control-Allow-Headers', '*');
+            next();
+        });
+        // from https://enable-cors.org/server_expressjs.html
+        // Serve static pages from a particular path.
+        this.app.use('/housing101', express.static('./public'));
+        this.app.use('/housing101', this.router);
+        this.router.get('/login', this.loginRender.bind(this));
+        this.router.get('/register', this.registerRender.bind(this));
+        this.router.get('/index', this.indexRender.bind(this));
+        this.router.get('/profile', this.profileRender.bind(this));
+        this.router.get('/posts', this.postsRender.bind(this));
+        this.router.get('/createPost', this.createPostRender.bind(this));
+        this.router.get('/', this.indexRender.bind(this));
     }
 
+    public listen(port) : void  {
+        this.app.listen(port);
+    }
+
+    private async loginRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/login.html');
+    }
+
+    private async registerRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/register.html')
+    }
+
+    private async indexRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/index.html');
+    }
+
+    private async profileRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/profile.html')
+    }
+
+    private async createPostRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/create_post.html')
+    }    
+    
+    private async postsRender(request, response, next) : Promise<void> {
+        response.redirect('/housing101/posts.html')
+    }
+
+    private async loginHandler(request, response, next) : Promise<void> {
+    }
+
+    private async registerHandler(request, response, next) : Promise<void> {
+    }
+
+    private async createPostHandler(request, response, next) : Promise<void> {
+    }
+}
+    /*
     private async errorHandler(request, response, next) : Promise<void> {
 	let value : boolean = await this.theDatabase.isFound(request.params['userId']+"-"+request.query.name);
 	if (!value) {
@@ -60,10 +97,6 @@ export class MyServer {
     private async deleteHandler(request, response) : Promise<void> {
 	/// YOUR CODE GOES HERE
 	await this.deleteCounter(request.params['userId']+"-"+request.query.name, response);
-    }
-
-    public listen(port) : void  {
-	this.server.listen(port);
     }
 
     public async createCounter(name: string, response) : Promise<void> {
@@ -102,5 +135,6 @@ export class MyServer {
 				       'value'  : name }));
 	response.end();
     }
-}
+    */
+
 
