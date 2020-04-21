@@ -20,30 +20,64 @@ export class Database {
     // ---------------------------------------------------------------- //
     // user information section
     // TODO: implement check, add, delete, update user information
-    public async check_username(username: string) : Promise<boolean> {
+    public async check_username(prospectiveUsername: string) : Promise<boolean> {
         // check username has been used
         // username is valid, return true 
+        var used = true;
+        await this.client.connect(this.uri, function (err, db) {
+            var cursor = db.collection(this.userDatabase).find({username: prospectiveUsername});
+            //this relies on username-email combinations being unique. No duplicates allowed!
+            cursor = cursor.toArray();
+            used = cursor.length === 0;
+            this.client.close();
+        });
+        return used;
         return true;
     }
-
-    public async check_email(email: string) : Promise<boolean> {
+    public async check_email(prospectiveEmail: string) : Promise<boolean> {
         // check email has been used
         // email is valid, return true 
-        return true;
+        var used = true;
+        await this.client.connect(this.uri, function (err, db) {
+            var cursor = db.collection(this.userDatabase).find({email: prospectiveEmail});
+            //this relies on username-email combinations being unique. No duplicates allowed!
+            cursor = cursor.toArray();
+            used = cursor.length === 0;
+            this.client.close();
+        });
+        return used;
     }
 
     public async autheticate_user(loginInfo : JSON) : Promise<boolean> {
         // loginInfo format:
         // {email:'xxx', password:'xxx'}
         // function will return true if email and password matches
-        return true;
+        var authenticated = false;
+        var info = JSON.parse("" + loginInfo);
+        await this.client.connect(this.uri, function (err, db) {
+            var cursor = db.collection(this.userDatabase).findOne({username: info.username, email: info.email});
+            //this relies on username-email combinations being unique. No duplicates allowed!
+            cursor = cursor.toArray();
+            if(cursor[0].password = info.password) authenticated = true;//do some fancy hashing or whatever here
+            this.client.close();
+        });
+        return authenticated;
     } 
 
     public async add_user(userinfo : JSON) : Promise<boolean> {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx', profile_img: 'xxx.jpg', interests: ['...', '...', '...']}
         // function will return true if user is successfully add into the database
-        return true;
+        var added = false;
+        var info = JSON.parse("" + userinfo);
+        if(!(await this.check_email(info.email))&& !(await this.check_username(info.username))) {
+            await this.client.connect(this.uri, function (err, db) {
+                db.collection(this.userDatabase).insertOne(info);
+                added = true;
+                this.client.close();
+            });
+        }
+        return added;
     } 
 
     public async update_user(userinfo : JSON) : Promise<boolean> {
