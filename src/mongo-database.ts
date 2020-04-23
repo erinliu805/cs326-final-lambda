@@ -32,7 +32,7 @@ export class Database {
             this.client.close();
         });
         return used;
-        return true;
+        //return true;
     }
     public async check_email(prospectiveEmail: string) : Promise<boolean> {
         // check email has been used
@@ -84,14 +84,32 @@ export class Database {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx', profile_img: 'xxx.jpg', interests: ['...', '...', '...']}
         // function will return true if user information is successfully updated
-        return true;
+        var updated = false;
+        var info = JSON.parse("" + userinfo);
+        if((await this.check_email(info.email))&& (await this.check_username(info.username))) {
+            await this.client.connect(this.uri, function (err, db) {
+                db.collection(this.userDatabase).updateOne({'username' : info.email}, { $set : userinfo }, { 'upsert' : true } );
+                updated = true;
+                this.client.close();
+            });
+        }
+        return updated;
     }     
     
     public async delete_user(userinfo : JSON) : Promise<boolean> {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx', profile_img: 'xxx.jpg', interests: ['...', '...', '...']}
         // function will return true if user information is successfully deleted
-        return true;
+        var deleted = false;
+        var info = JSON.parse("" + userinfo);
+        if((await this.check_email(info.email))&& (await this.check_username(info.username))) {
+            await this.client.connect(this.uri, function (err, db) {
+                db.collection(this.userDatabase).deleteOne({'username' : info.username });
+                deleted = true;
+                this.client.close();
+            });
+        }
+        return deleted;
     }    
 
     // --------------------------------------------------------//
@@ -101,6 +119,7 @@ export class Database {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......', imgs: ['xxx.jpg', 'xxx.jpg'...], topic: 'xxx',rate: 0-5,}*/
         //return true when post is created
+        
         return true;
     }
 

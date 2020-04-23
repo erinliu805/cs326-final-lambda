@@ -30,6 +30,15 @@ export class MyServer {
         this.router.get('/posts', this.postsRender.bind(this));
         this.router.get('/createPost', this.createPostRender.bind(this));
         this.router.get('/', this.indexRender.bind(this));
+
+        // this.app.use(express.json());
+        // this.router.post('/login', this.loginRender.bind(this));
+        // this.router.post('/register', this.registerRender.bind(this));
+        // this.router.post('/index', this.indexRender.bind(this));
+        // this.router.post('/profile', this.profileRender.bind(this));
+        // this.router.post('/posts', this.postsRender.bind(this));
+        // this.router.post('/createPost', this.createPostRender.bind(this));
+        // this.router.post('/', this.indexRender.bind(this));
     }
 
     public listen(port) : void  {
