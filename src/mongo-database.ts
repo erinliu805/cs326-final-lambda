@@ -7,6 +7,7 @@ export class Database {
     private collectionName : string;
     private userDatabase : string = "user-db";
     private postDatabase : string = "post-db";
+    private topicDatabase : string = "topic-db";
 
     constructor(collectionName: string) {
 	this.collectionName = collectionName;
@@ -119,22 +120,42 @@ export class Database {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......', imgs: ['xxx.jpg', 'xxx.jpg'...], topic: 'xxx',rate: 0-5,}*/
         //return true when post is created
-        
-        return true;
+        var info = JSON.parse("" + post);
+        var posted = true;
+        await this.client.connect(this.uri, function (err, db) {
+            if(err !== null) posted = false;
+            db.collection("" + info.topic).insertOne(info);
+            this.client.close();
+        });
+        return posted;
     }
 
     public async update_post(post: JSON) : Promise<boolean> {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......', imgs: ['xxx.jpg', 'xxx.jpg'...], topic: 'xxx',rate: 0-5,}*/
         //return true when post is updated
-        return true;
+        var info = JSON.parse("" + post);
+        var posted = true;
+        await this.client.connect(this.uri, function (err, db) {
+            if(err !== null) posted = false;
+            db.collection("" + info.topic).updateOne(info);
+            this.client.close();
+        });
+        return posted;
     }
 
     public async delete_post(post: JSON) : Promise<boolean> {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......', imgs: ['xxx.jpg', 'xxx.jpg'...], topic: 'xxx',rate: 0-5,}*/
         //return true when post is deleted
-        return true;
+        var info = JSON.parse("" + post);
+        var posted = true;
+        await this.client.connect(this.uri, function (err, db) {
+            if(err !== null) posted = false;
+            db.collection("" + info.topic).deleteOne(info);
+            this.client.close();
+        });
+        return posted;
     }
 }
 
