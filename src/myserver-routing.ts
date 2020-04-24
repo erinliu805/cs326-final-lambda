@@ -21,6 +21,13 @@ export class MyServer {
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use('/housing101', express.static('./public'));
         this.app.use('/housing101', this.router);
+        this.router.get('/:page', async (request, response, next) => {
+            let file = request.params.page;
+            console.log(file);
+            response.write(JSON.stringify("The file you requested is "+file));
+            response.end();
+            next();
+        })
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
         
