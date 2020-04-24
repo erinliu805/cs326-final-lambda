@@ -10,7 +10,6 @@ export class MyServer {
     private app = express();
     private port = 8080;
     private router = express.Router();
-    private fs = require('fs');
     constructor(db) {
         //this.theDatabase = db;
         this.router.use((request, response, next) => {
@@ -21,8 +20,8 @@ export class MyServer {
         });
         // from https://enable-cors.org/server_expressjs.html
         // Serve static pages from a particular path.
-        this.app.use('/housing101', express.static('./public'));
-        this.app.use('/housing101', this.router);
+        this.app.use('/', express.static('./public'));
+        this.app.use('/', this.router);
         this.router.get('/login', this.loginRender.bind(this));
         this.router.get('/register', this.registerRender.bind(this));
         this.router.get('/index', this.indexRender.bind(this));
@@ -30,34 +29,37 @@ export class MyServer {
         this.router.get('/posts', this.postsRender.bind(this));
         this.router.get('/createPost', this.createPostRender.bind(this));
         this.router.get('/', this.indexRender.bind(this));
+        this.router.post('/posts', this.postsHandler.bind(this));
     }
 
-    public listen(port) : void  {
+    public listen(port) : void {
+        console.log("Listening at port:" + port);
         this.app.listen(port);
     }
 
     private async loginRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/login.html');
+        console.log("Login Render called");
+        response.redirect('/login.html');
     }
 
     private async registerRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/register.html')
+        response.redirect('/register.html')
     }
 
     private async indexRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/index.html');
+        response.redirect('/index.html');
     }
 
     private async profileRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/profile.html')
+        response.redirect('/profile.html')
     }
 
     private async createPostRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/create_post.html')
+        response.redirect('/create_post.html')
     }    
     
     private async postsRender(request, response, next) : Promise<void> {
-        response.redirect('/housing101/posts.html')
+        response.redirect('/posts.html')
     }
 
     private async loginHandler(request, response, next) : Promise<void> {
@@ -67,6 +69,18 @@ export class MyServer {
     }
 
     private async createPostHandler(request, response, next) : Promise<void> {
+    }
+
+    private async postsHandler(request, response, next) : Promise<void> {
+        console.log('Login handler');
+        if (request.body.token == ''){
+            let posts = {'title': 'title for the article', 'author':'user name goes here', 'content':'what is in the article'};
+            response.write(JSON.stringify(posts));
+            response.end();
+            next();
+        }
+
+
     }
 }
     /*

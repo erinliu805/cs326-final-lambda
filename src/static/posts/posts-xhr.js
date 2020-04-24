@@ -1,5 +1,21 @@
 const listenURL = "http://0.0.0.0:8080";
 const user_img = "https://meetanentrepreneur.lu/wp-content/uploads/2019/08/profil-linkedin.jpg"
+async function postData(url, data) {
+    const resp = await fetch(url,
+                             {
+                                 method: 'POST',
+                                 mode: 'cors',
+                                 cache: 'no-cache',
+                                 credentials: 'same-origin',
+                                 headers: {
+                                     'Content-Type': 'application/json'
+                                 },
+                                 redirect: 'follow',
+                                 body: JSON.stringify(data)
+                             });
+    return resp;
+}
+
 function generateHTML(author, title, content) {
     let html = `<div class="media content-section col-md-8>
                 <img src="${user_img}" class="post-img rounded" alt="user-photo"></img>
@@ -19,8 +35,9 @@ function generateHTML(author, title, content) {
 function readPost() {
     (async () => {
         console.log("Reading from server");
-        const newURL = listenURL + "/read";
-        const resp  = await fetch (newURL);
+        const newURL = listenURL + "/posts";
+        let data = {'token':''} //supposed to be login token
+        const resp  = await postData(newURL, data);
         const j = await resp.json();
         let html = generateHTML(j["author"], j['title'], j['content']);
         console.log(html);
