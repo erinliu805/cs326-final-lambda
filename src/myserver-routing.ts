@@ -96,6 +96,16 @@ export class MyServer {
             next();
         });
 
+        this.router.get('/read/:page', async (request, response, next) => {
+            let page : number = request.params.page
+            if (page == NaN){
+                page = 0
+            }
+            let post = await this.theDatabase.read_post(page);
+            response.write(JSON.stringify(post));
+            response.end();
+        })
+
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
         this.router.post('/login', this.loginHandler.bind(this));

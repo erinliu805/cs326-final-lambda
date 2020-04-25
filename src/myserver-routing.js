@@ -155,6 +155,24 @@ var MyServer = /** @class */ (function () {
                 return [2 /*return*/];
             });
         }); });
+        this.router.get('/read/:page', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+            var page, post;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        page = request.params.page;
+                        if (page == NaN) {
+                            page = 0;
+                        }
+                        return [4 /*yield*/, this.theDatabase.read_post(page)];
+                    case 1:
+                        post = _a.sent();
+                        response.write(JSON.stringify(post));
+                        response.end();
+                        return [2 /*return*/];
+                }
+            });
+        }); });
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
         this.router.post('/login', this.loginHandler.bind(this));

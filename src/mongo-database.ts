@@ -252,4 +252,23 @@ export class Database {
             return false
         }
     }
+
+    public async read_post(page: number) : Promise<JSON> {
+        // post format:
+        /* {username: 'xxx', date: Date, title: 'xxx', content: '......'}*/
+        //return true when post is deleted
+        let db = await this.client.db(this.dbName);
+        let collection = await db.collection(this.postDatabase);
+        console.log('Running read post, the input is: ');
+        console.log(page);
+        try {
+            let result = await collection.findOne().skip(page);
+            console.log("result = " + result);
+            return result;
+        } catch (error) {
+            console.log(error);
+            console.log('falied');
+            return null
+        }
+    }
 }
