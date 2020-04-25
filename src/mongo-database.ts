@@ -1,5 +1,4 @@
 import { userInfo } from "os";
-
 require('dotenv').config();
 let bcrypt = require('bcrypt');
 console.log(process.env.URI);

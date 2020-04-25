@@ -11,7 +11,7 @@ let path = require('path')
 export class MyServer {
     private theDatabase;
     private app = express();
-    private port = process.env.PORT || 8080;
+    private port = process.env.PORT;
     private router = express.Router();
     constructor(db) {
         this.theDatabase = db;
