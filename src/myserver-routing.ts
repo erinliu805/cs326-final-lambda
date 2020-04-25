@@ -4,10 +4,10 @@ import { request } from "http";
 let http = require('http');
 let url = require('url');
 let express = require('express');
-let bcrypt = require('bcrypt');
 let fs = require('fs');
 let users = [];
 let posts = [];
+let path = require('path')
 export class MyServer {
     private theDatabase;
     private app = express();
@@ -15,70 +15,26 @@ export class MyServer {
     private router = express.Router();
     constructor(db) {
         this.theDatabase = db;
-        this.app.use(async (request, response, next) => {
+        this.router.use((request, response, next) => {
             response.header('Content-Type', 'application/json');
             response.header('Access-Control-Allow-Origin', '*');
             response.header('Access-Control-Allow-Headers', '*');
             next();
         });
+        this.app.use('/', express.static('./public'));
         this.app.use(express.urlencoded({ extended: false }));
-        this.app.use('/housing101', express.static('./public'));
-        this.app.use('/housing101', this.router);
-
-        this.router.get('/css/:file', async (request, response, next) => {
-            let path = __dirname + "/public/css/" + request.params.file
-            fs.readFile(path, null, function (error, data) {
-                if (error) {
-                    response.writeHead(404); 
-                    response.write('File not found!');
-                } else {
-                    response.writeHead(200, {
-                        "Content-Type": "text/html"});
-                    response.write(data);
-                }
-                response.end();
-            });
-            next();
-        })
-
-        this.router.get('/js/:file', async (request, response, next) => {
-            let path = __dirname + "/public/js/" + request.params.file
-            fs.readFile(path, null, function (error, data) {
-                if (error) {
-                    response.writeHead(404); 
-                    response.write('File not found!');
-                } else {
-                    response.writeHead(200, {
-                        "Content-Type": "text/html"});
-                    response.write(data);
-                }
-                response.end();
-            });
-            next();
-        })
-
+        this.app.use(express.json());
         this.router.get('/login', async (request, response, next) => {
-            
-            let path = __dirname + "/public/login.html";
-            console.log(path);
-            fs.readFile(path, null, function (error, data) {
-                if (error) {
-                    response.writeHead(404);
-                    response.write('File not found!');
-                } else {
-                    response.writeHead(200, {
-                        "Content-Type": "text/html"
-                    });
-                    response.write(data);
-                }
-                response.end();
-            });
-            next();
-        });
-
+            let file_path = path.join(__dirname, 'public/login.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+        })
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
         this.router.post('/login', this.loginHandler.bind(this));
+        this.app.use('/', this.router);
     }
 
     public listen(port): void {
@@ -109,7 +65,7 @@ export class MyServer {
         } catch (error) {
             let message = "register failed, use local memeory instead";
             console.log(message);
-            response.write('failed');
+            response.write('Something goes wrong');
             // TODO add user into the database
             users.push(new_user);
         }
@@ -141,7 +97,7 @@ export class MyServer {
             'password': request.body.password
         };
         try {
-            if (await this.theDatabase.authenticate_user(data)){
+            if (await this.theDatabase.autheticate_user(data)){
                 response.write('success');
                 console.log(data);
                 response.end();
@@ -150,6 +106,7 @@ export class MyServer {
                 response.end()
             }
         } catch (error) {
+            console.log(error);
             response.write("Something goes wrong")
             response.end()
         }
