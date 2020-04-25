@@ -11,7 +11,7 @@ let path = require('path')
 export class MyServer {
     private theDatabase;
     private app = express();
-    private port = process.env.PORT || 8080;
+    private port = process.env.PORT;
     private router = express.Router();
     constructor(db) {
         this.theDatabase = db;
@@ -95,6 +95,16 @@ export class MyServer {
             response.end();
             next();
         });
+
+        this.router.get('/read/:page', async (request, response, next) => {
+            let page : number = request.params.page
+            if (page == NaN){
+                page = 0
+            }
+            let post = await this.theDatabase.read_post(page);
+            response.write(JSON.stringify(post));
+            response.end();
+        })
 
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));

@@ -393,6 +393,37 @@ var Database = /** @class */ (function () {
             });
         });
     };
+    Database.prototype.read_post = function (page) {
+        return __awaiter(this, void 0, void 0, function () {
+            var db, collection, result, error_10;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 1:
+                        db = _a.sent();
+                        return [4 /*yield*/, db.collection(this.postDatabase)];
+                    case 2:
+                        collection = _a.sent();
+                        console.log('Running read post, the input is: ');
+                        console.log(page);
+                        _a.label = 3;
+                    case 3:
+                        _a.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, collection.findOne().skip(page)];
+                    case 4:
+                        result = _a.sent();
+                        console.log("result = " + result);
+                        return [2 /*return*/, result];
+                    case 5:
+                        error_10 = _a.sent();
+                        console.log(error_10);
+                        console.log('falied');
+                        return [2 /*return*/, null];
+                    case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return Database;
 }());
 exports.Database = Database;
