@@ -2,12 +2,12 @@
   "name": "cs326-final-lambda",
   "version": "1.0.0",
   "description": "This is a project building a forum for UMass students to share their off-campus living experiences",
-  "main": "index.js",
+  "main": "server-main.js",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "start": "node src/server-main.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

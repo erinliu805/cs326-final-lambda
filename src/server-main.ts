@@ -8,4 +8,4 @@ console.log(process.env.USERNAME);
 console.log(process.env.PASSWORD);
 const theDatabase = new Database('housing101');
 const theServer = new MyServer(theDatabase);
-theServer.listen(8080);
+theServer.listen(process.env.PORT);

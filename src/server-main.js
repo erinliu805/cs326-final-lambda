@@ -8,4 +8,4 @@ console.log(process.env.USERNAME);
 console.log(process.env.PASSWORD);
 var theDatabase = new mongo_database_1.Database('housing101');
 var theServer = new myserver_routing_1.MyServer(theDatabase);
-theServer.listen(8080);
+theServer.listen(process.env.PORT);
