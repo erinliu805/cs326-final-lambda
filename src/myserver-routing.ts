@@ -30,7 +30,71 @@ export class MyServer {
             response.header('Content-Type', 'text/html');
             response.write(data);
             response.end();
-        })
+            next();
+        });
+
+        this.router.get('/register', async (request, response, next) => {
+            let file_path = path.join(__dirname, 'public/register.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+            next();
+        });
+        
+        this.router.get('/', async (request, response, next) => {
+            let file_path = path.join(__dirname, 'public/index.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+            next();
+        });
+        this.router.get('/posts', async (request, response, next) => {
+            let file_path = path.join(__dirname, 'public/posts.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+            next();
+        });
+
+        this.router.get('/create_post', async (request, response, next) => {
+            let file_path = path.join(__dirname, 'public/create_post.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+            next();
+        });
+
+        this.router.get('/profile', async (request, response, next) => {
+            let file_path = path.join(__dirname, 'public/profile.html');
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/html');
+            response.write(data);
+            response.end();
+            next();
+        });
+
+        this.router.get('/css/:file', async (request, response, next) => {
+            let file_path = __dirname + "/public/css/" + request.params.file
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'text/css');
+            response.write(data);
+            response.end();
+            next();
+        });
+
+        this.router.get('/js/:file', async (request, response, next) => {
+            let file_path = __dirname + "/public/js/" + request.params.file
+            let data = fs.readFileSync(file_path);
+            response.header('Content-Type', 'application/x-javascript');
+            response.write(data);
+            response.end();
+            next();
+        });
+
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
         this.router.post('/login', this.loginHandler.bind(this));
