@@ -87,44 +87,32 @@ export class MyServer {
     }
 
     private async registerHandler(request, response, next) {
-        let data = {
+        let new_user = {
             'username': request.body.username,
             'email': request.body.email,
             'password': request.body.password
         };
-        console.log(data);
+        console.log(new_user);
         try {
             // TODO
             // 1. Check Username and Email is unique
             // 2. If so, store user info into the database
-            if (await this.theDatabase.checkusername(data.username) === true &&
-                await this.theDatabase.checkemail(data.email) === true) {
-                let hashedpassword = await bcrypt.hash(data.password, 'housing');
-                console.log(hashedpassword);
-                let new_user = {
-                    username: data.username,
-                    email: data.email,
-                    password: hashedpassword
-                }
+            if (await this.theDatabase.check_username(new_user['username']) === true &&
+                await this.theDatabase.check_email(new_user['email']) === true) {
                 await this.theDatabase.add_user(new_user);
+                response.write('success');
             }
-
+            else {
+                console.log('User existed')
+                response.write('User existed');
+            }
         } catch (error) {
             let message = "register failed, use local memeory instead";
             console.log(message);
-            response.write(message);
-            let hashedpassword = await bcrypt.hash(data.password, 'housing');
-            console.log(hashedpassword);
-            let new_user = {
-                username: data.username,
-                email: data.email,
-                password: hashedpassword
-            }
-
+            response.write('failed');
             // TODO add user into the database
             users.push(new_user);
         }
-        response.write(JSON.stringify(data));
         response.end();
         next();
     }
