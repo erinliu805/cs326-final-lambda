@@ -24,16 +24,16 @@ export class Database {
     // ---------------------------------------------------------------- //
     // user information section
     // TODO: implement check, add, delete, update user information
-    public async check_username(prospectiveUsername: string) : Promise<boolean> {
+    public async check_username(username: string) : Promise<boolean> {
         // check username has been used
         // username is valid, return true 
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.userDatabase);
         console.log('Running check username, the input is: ');
-        console.log(userInfo);
+        console.log(username);
         try {
             let result : number = await collection.find(
-                {'username': userInfo['username']}
+                {'username': username}
             ).count();
             console.log("result = " + result);    
             if (result === 0){
@@ -47,16 +47,16 @@ export class Database {
             return false
         }
     }
-    public async check_email(prospectiveEmail: string) : Promise<boolean> {
+    public async check_email(email: string) : Promise<boolean> {
         // check email has been used
         // email is valid, return true 
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.userDatabase);
         console.log('Running check email, the input is: ');
-        console.log(userInfo);
+        console.log(email);
         try {
             let result : number = await collection.find(
-                {'email': userInfo['email']}
+                {'email': email}
             ).count();
             console.log("result = " + result);    
             if (result === 0){
@@ -71,17 +71,21 @@ export class Database {
         }
     }
 
-    public async autheticate_user(loginInfo : JSON) : Promise<boolean> {
+    public async autheticate_user(loginInfo: JSON) : Promise<boolean> {
         // loginInfo format:
         // {email:'xxx', password:'xxx'}
         // function will return true if email and password matches
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.userDatabase);
         console.log('Running check username, the input is: ');
-        console.log(userInfo);
+        let login_user = {
+            'email': loginInfo['email'],
+            'password': loginInfo['password']
+        }
+        console.log(login_user);
         try {
             let user = await collection.findOne(
-                {'email': loginInfo['username']}
+                {'email': login_user['email']}
             );
             console.log('The user is: ')
             console.log(user)
@@ -97,20 +101,20 @@ export class Database {
         }
     } 
 
-    public async add_user(userinfo : JSON) : Promise<boolean> {
+    public async add_user(userInfo: JSON) : Promise<boolean> {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx'}
         // function will return true if user is successfully add into the database
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.userDatabase);
         console.log('Running add user, the input is: ');
-        console.log(userInfo);
-        let hashedpassword : string = bcrypt.hash(userInfo['password'], 1);
         let new_user = {
             'email' : userInfo['email'],
             'username' : userInfo['username'],
-            'hashedpassword' : hashedpassword
+            'hashedpassword' : userInfo['password']
         }
+        let hashedpassword : string = bcrypt.hashSync(userInfo['password'], 10).toString();
+        new_user['hashedpassword'] = hashedpassword;
         try {
             let result = await collection.insertOne(new_user);
             console.log("result = " + result);    
@@ -122,23 +126,23 @@ export class Database {
         }
     } 
 
-    public async update_user(userinfo : JSON) : Promise<boolean> {
+    public async update_user(userInfo) : Promise<boolean> {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx'}
         // function will return true if user information is successfully updated
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.userDatabase);
         console.log('Running add user, the input is: ');
-        console.log(userInfo);
-        let hashedpassword : string = bcrypt.hash(userInfo['password'], 1);
         let new_user = {
             'email' : userInfo['email'],
             'username' : userInfo['username'],
-            'hashedpassword' : hashedpassword
+            'hashedpassword' : userInfo['password']
         }
+        let hashedpassword : string = bcrypt.hashSync(userInfo['password'], 10).toString();
+        new_user['hashedpassword'] = hashedpassword;
         try {
             let result = await collection.findOneAndUpdate(
-                {'email': userInfo['email']},
+                {'email': new_user['email']},
                 new_user
             );
             console.log("result = " + result);    
@@ -150,7 +154,7 @@ export class Database {
         }
     }     
     
-    public async delete_user(userinfo : JSON) : Promise<boolean> {
+    public async delete_user(userInfo : JSON) : Promise<boolean> {
         // userinfo format:
         // {email:'xxx', username: 'xxx', password:'xxx'}
         // function will return true if user information is successfully deleted
