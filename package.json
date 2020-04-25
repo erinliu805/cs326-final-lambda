@@ -6,9 +6,7 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {
-    "start": "nodemon -x ts-node src/server-main.ts"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erinliu805/cs326-final-lambda.git"

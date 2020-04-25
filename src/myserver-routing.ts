@@ -11,7 +11,7 @@ let path = require('path')
 export class MyServer {
     private theDatabase;
     private app = express();
-    private port = 8080;
+    private port = process.env.PORT || 8080;
     private router = express.Router();
     constructor(db) {
         this.theDatabase = db;
@@ -50,6 +50,7 @@ export class MyServer {
             response.end();
             next();
         });
+
         this.router.get('/posts', async (request, response, next) => {
             let file_path = path.join(__dirname, 'public/posts.html');
             let data = fs.readFileSync(file_path);
