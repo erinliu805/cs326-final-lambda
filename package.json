@@ -6,7 +6,9 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {},
+  "scripts": {
+    "start": "node src/server-main.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erinliu805/cs326-final-lambda.git"
