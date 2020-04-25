@@ -1,5 +1,5 @@
 
-const url = "http://0.0.0.0:8080/housing101";
+const url = "https://aqueous-dusk-44841.herokuapp.com/";
 
 async function postData(url, data) {
     const resp = await fetch(url,

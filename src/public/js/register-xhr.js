@@ -1,4 +1,4 @@
-const url = "http://0.0.0.0:8080/housing101/register"; 
+const url = "https://aqueous-dusk-44841.herokuapp.com/register"; 
 
 // NEW: helper method for posting data
 async function postData(url, data) {
@@ -18,23 +18,19 @@ async function postData(url, data) {
 }
 
 
-function user_register() {
-    (async () => {
-	let username = document.getElementById("username").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
-    let repassword = document.getElementById("password-confirm").value;
-    let userInterestedHousingArea = document.getElementById("userInterestedHousingArea").value;
-    let userCurrentHousingArea = document.getElementById("userCurrentHousingArea").value;
-
-	const data = { 'email' : email, 'username' : username, 'password' : password, 'userCurrentHousingArea' : userCurrentHousingArea, 'userInterestedHousingArea' : userInterestedHousingArea  }; // -- (1)
-        const newURL = url + "/users/" + username + "/add_user"; 
-        const resp = await postData(newURL, data); 
-	const j = await resp.json();
-	if (j['result'] !== 'error') {
-	    document.getElementById("output").innerHTML = username +  " created.</b>";
-	} else {
-	    document.getElementById("output").innerHTML = "error";
+function checker() {
+	async () => {
+		let username = document.getElementById("username").value;
+		let email = document.getElementById("email").value;
+		let password = document.getElementById("password").value;
+		let confirmPassword = document.getElementById("password-confirm").value;
+		if (password != confirmPassword) {
+			let message = "Two password not the same";
+			document.getElementById("password-prompt").removeAttribute('hidden');
+			document.getElementById("password-prompt").innerHTML = message;
+		}
+		if (password == confirmPassword) {
+			document.getElementById("password-prompt").addAttribute('hidden');
+		}
 	}
-    })();
-}
+};

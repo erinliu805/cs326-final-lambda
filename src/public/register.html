@@ -7,7 +7,7 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="/css/main.css">
 	<link rel="stylesheet" href="/css/register.css">
-	<script src="register-xhr.js"></script>
+	<script src="/js/register-xhr.js"></script>
 	<title>Amherst Housing Forum</title>
 </head>
 <body>
@@ -47,43 +47,18 @@
                 <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
 			  </svg></div>
 			  <div class="container">
-				<div class="row">
-				  <div class="col">
-					<div class="form-group"><input class="form-control" type="username" name="username" id="username" placeholder="Username*"></div>
-				  </div>
-				  <div class="col">
-					<label>Current Housing Area*</label>
-					<select id="userCurrentHousingArea">
-						<option value="none">None</option>
-						<option value="northeast">Northeast</option>
-						<option value="southwest">Southwest</option>
-						<option value="downtown">Downtown</option>
-						<option value="northampton">Northampton</option>
-					  </select>
-				  </div>
-				  <div class="w-100"></div>
-				  <div class="col">
-					<div class="form-group"><input class="form-control" type="email" name="email" id="email" placeholder="Email*"></div>
-					<div class="form-group"><input class="form-control" type="password" name="password" id="password" placeholder="Password*"></div>
-					<div class="form-group"><input class="form-control" type="password-confirm" name="password-confirm" id="password-confirm" placeholder="Confirm Password*"></div>
-				  </div>
-				  <div class="col">
-					<label>Interested Housing Area*</label>
-					<select id="userInterestedHousingArea">
-						<option value="none">None</option>
-						<option value="northeast">Northeast</option>
-						<option value="southwest">Southwest</option>
-						<option value="downtown">Downtown</option>
-						<option value="northampton">Northampton</option>
-					  </select>
-				  </div>
-				</div>
-
+					<div class="form-group"><input class="form-control" type="username" name="username" id="username" placeholder="Username"></div>
+					<label for="password" id="username-prompt" class="danger" hidden></label>
+					<div class="form-group"><input class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
+					<label for="email" id="email-prompt" class="danger" hidden></label>
+					<div class="form-group"><input class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
+					<label for="password-confirm" id="password-prompt" class="danger" hidden></label>
+					<div class="form-group"><input onkeypress="checker()" class="form-control" type="password-confirm" name="password-confirm" id="password-confirm" placeholder="Confirm Password"></div>
 			  </div>
-            <div class="form-group"><button onclick="add_user()"class="btn btn-primary btn-block" type="submit">Register</button></div></form>
+            <div class="form-group"><button onclick="user_register()"class="btn btn-primary btn-block" type="submit">Register</button></div></form>
             <div class="col">
-        <p id="output" style="font-size: xx-large;">
-          <small style="font-size: small;"></small>
+        		<p id="output" style="font-size: xx-large;">
+          	<small style="font-size: small;"></small>
         </p>
       </div>
     </div>
