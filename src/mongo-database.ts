@@ -16,7 +16,7 @@ export class Database {
         this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
     
 	    (async () => {
-	        await this.client.connect(this.uri, function(err, db) {
+	        await this.client.connect(function(err, db) {
                 console.log("connection established");
                 this.client.close();
             }).catch(err => { console.log(err); });
@@ -49,7 +49,7 @@ export class Database {
         //     return false
         // }
         console.log("checking if username " + username + " has been used");
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result : number = db.collection(this.userDatabase).find({"username" : username}).count();
             this.client.close();
             return result === 0;
@@ -79,7 +79,7 @@ export class Database {
         //     return false
         // }
         console.log("checking if email " + email + " has been used");
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result : number = db.collection(this.userDatabase).find({"email" : email}).count();
             this.client.close();
             return result === 0;
@@ -116,7 +116,7 @@ export class Database {
         //     return false
         // }
         console.log("authenticating user " + loginInfo);
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).findOne({"email" : loginInfo['email']});
             this.client.close();
             return bcrypt.compare(loginInfo['password'], result['hashedpassword']);
@@ -157,7 +157,7 @@ export class Database {
             console.log("username or email has been used before!\n" + userInfo);
             return false;
         }
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).insertOne(new_user);
             this.client.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
@@ -201,7 +201,7 @@ export class Database {
             console.log("user not found!\n" + userInfo);
             return false;
         }
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).findOneAndReplace({'email' : userInfo['email']}, new_user);
             this.client.close();
             return result !== null;
@@ -230,7 +230,7 @@ export class Database {
         //     return false
         // }
         console.log('Running delete user, the input is: ' + userInfo);
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).remove({'email' : userInfo['email']});
             this.client.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
@@ -272,7 +272,7 @@ export class Database {
             'updated' : -1
         }
         console.log('Running create post, the input is: ' + post);
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).insertOne(data);
             this.client.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
@@ -307,7 +307,7 @@ export class Database {
         //     return false
         // }
         console.log('Running create post, the input is: ' + post);
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).findOneAndUpdate(
                 {'_id':post['_id']},
                 {
@@ -345,7 +345,7 @@ export class Database {
         //     return false
         // }
         console.log('Running delete post, the input is: ' + post);
-        await this.client.connect(this.uri, function(err, db) {
+        await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).remove(post);
             this.client.close();
             return result['nRemoved'] === 1;
