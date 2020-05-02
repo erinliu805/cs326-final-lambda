@@ -52,7 +52,10 @@ var Database = /** @class */ (function () {
         (function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.connect()["catch"](function (err) { console.log(err); })];
+                    case 0: return [4 /*yield*/, this.client.connect(function (err, db) {
+                            console.log("connection established");
+                            this.client.close();
+                        })["catch"](function (err) { console.log(err); })];
                     case 1:
                         _a.sent();
                         return [2 /*return*/];
@@ -65,223 +68,280 @@ var Database = /** @class */ (function () {
     // TODO: implement check, add, delete, update user information
     Database.prototype.check_username = function (username) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // check username has been used
+                        // username not used, return true 
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running check username, the input is: ');
+                        // console.log(username);
+                        // try {
+                        //     let result : number = await collection.find(
+                        //         {'username': username}
+                        //     ).count();
+                        //     console.log("result = " + result);    
+                        //     if (result === 0){
+                        //         return true;
+                        //     } else {
+                        //         return false;
+                        //     }
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log("checking if username " + username + " has been used");
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).find({ "username": username }).count();
+                                this.client.close();
+                                return result === 0;
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running check username, the input is: ');
-                        console.log(username);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.find({ 'username': username }).count()];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        if (result === 0) {
-                            return [2 /*return*/, true];
-                        }
-                        else {
-                            return [2 /*return*/, false];
-                        }
-                        return [3 /*break*/, 6];
-                    case 5:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.check_email = function (email) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // check email has been used
+                        // email is not used, return true 
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running check email, the input is: ');
+                        // console.log(email);
+                        // try {
+                        //     let result : number = await collection.find(
+                        //         {'email': email}
+                        //     ).count();
+                        //     console.log("result = " + result);    
+                        //     if (result === 0){
+                        //         return true;
+                        //     } else {
+                        //         return false;
+                        //     }
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log("checking if email " + email + " has been used");
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).find({ "email": email }).count();
+                                this.client.close();
+                                return result === 0;
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running check email, the input is: ');
-                        console.log(email);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.find({ 'email': email }).count()];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        if (result === 0) {
-                            return [2 /*return*/, true];
-                        }
-                        else {
-                            return [2 /*return*/, false];
-                        }
-                        return [3 /*break*/, 6];
-                    case 5:
-                        error_2 = _a.sent();
-                        console.log(error_2);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.autheticate_user = function (loginInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, login_user, user, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // loginInfo format:
+                        // {email:'xxx', password:'xxx'}
+                        // function will return true if email and password matches
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running check username, the input is: ');
+                        // let login_user = {
+                        //     'email': loginInfo['email'],
+                        //     'password': loginInfo['password']
+                        // }
+                        // console.log(login_user);
+                        // try {
+                        //     let user = await collection.findOne(
+                        //         {'email': login_user['email']}
+                        //     );
+                        //     console.log('The user is: ')
+                        //     console.log(user)
+                        //     if (await bcrypt.compare(loginInfo['password'], user['hashedpassword'])) {
+                        //         return true;
+                        //     } else {
+                        //         return false;
+                        //     }
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log("authenticating user " + loginInfo);
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).findOne({ "email": loginInfo['email'] });
+                                this.client.close();
+                                return bcrypt.compare(loginInfo['password'], result['hashedpassword']);
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running check username, the input is: ');
-                        login_user = {
-                            'email': loginInfo['email'],
-                            'password': loginInfo['password']
-                        };
-                        console.log(login_user);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 6, , 7]);
-                        return [4 /*yield*/, collection.findOne({ 'email': login_user['email'] })];
-                    case 4:
-                        user = _a.sent();
-                        console.log('The user is: ');
-                        console.log(user);
-                        return [4 /*yield*/, bcrypt.compare(loginInfo['password'], user['hashedpassword'])];
-                    case 5:
-                        if (_a.sent()) {
-                            return [2 /*return*/, true];
-                        }
-                        else {
-                            return [2 /*return*/, false];
-                        }
-                        return [3 /*break*/, 7];
-                    case 6:
-                        error_3 = _a.sent();
-                        console.log(error_3);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 7: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.add_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, new_user, hashedpassword, result, error_4;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
-                    case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running add user, the input is: ');
+            var new_user, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        // userinfo format:
+                        // {email:'xxx', username: 'xxx', password:'xxx'}
+                        // function will return true if user is successfully add into the database
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running add user, the input is: ');
+                        // let new_user = {
+                        //     'email' : userInfo['email'],
+                        //     'username' : userInfo['username'],
+                        //     'hashedpassword' : userInfo['password']
+                        // }
+                        // let hashedpassword : string = bcrypt.hashSync(userInfo['password'], 10).toString();
+                        // new_user['hashedpassword'] = hashedpassword;
+                        // try {
+                        //     let result = await collection.insertOne(new_user);
+                        //     console.log("result = " + result);    
+                        //     return true;
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log('Running add user, the input is: ' + userInfo);
                         new_user = {
                             'email': userInfo['email'],
                             'username': userInfo['username'],
-                            'hashedpassword': userInfo['password']
+                            'hashedpassword': bcrypt.hashSync(userInfo['password'], 10).toString()
                         };
-                        hashedpassword = bcrypt.hashSync(userInfo['password'], 10).toString();
-                        new_user['hashedpassword'] = hashedpassword;
-                        _a.label = 3;
+                        return [4 /*yield*/, this.check_username(userInfo['username'])];
+                    case 1:
+                        _a = !(_b.sent());
+                        if (_a) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.check_email(userInfo['email'])];
+                    case 2:
+                        _a = !(_b.sent());
+                        _b.label = 3;
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.insertOne(new_user)];
+                        if (_a) {
+                            console.log("username or email has been used before!\n" + userInfo);
+                            return [2 /*return*/, false];
+                        }
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).insertOne(new_user);
+                                this.client.close();
+                                return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
+                            })["catch"](function (err) { console.log(err); })];
                     case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_4 = _a.sent();
-                        console.log(error_4);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _b.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.update_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, new_user, hashedpassword, result, error_5;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
-                    case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running add user, the input is: ');
+            var new_user, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        // userinfo format:
+                        // {email:'xxx', username: 'xxx', password:'xxx'}
+                        // function will return true if user information is successfully updated
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running add user, the input is: ');
+                        // let new_user = {
+                        //     'email' : userInfo['email'],
+                        //     'username' : userInfo['username'],
+                        //     'hashedpassword' : userInfo['password']
+                        // }
+                        // let hashedpassword : string = bcrypt.hashSync(userInfo['password'], 10).toString();
+                        // new_user['hashedpassword'] = hashedpassword;
+                        // try {
+                        //     let result = await collection.findOneAndUpdate(
+                        //         {'email': new_user['email']},
+                        //         new_user
+                        //     );
+                        //     console.log("result = " + result);    
+                        //     return true;
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log('Running update user, the input is: ' + userInfo);
                         new_user = {
                             'email': userInfo['email'],
                             'username': userInfo['username'],
-                            'hashedpassword': userInfo['password']
+                            'hashedpassword': bcrypt.hashSync(userInfo['password'], 10).toString()
                         };
-                        hashedpassword = bcrypt.hashSync(userInfo['password'], 10).toString();
-                        new_user['hashedpassword'] = hashedpassword;
-                        _a.label = 3;
+                        return [4 /*yield*/, this.check_username(userInfo['username'])];
+                    case 1:
+                        _a = (_b.sent());
+                        if (!_a) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.check_email(userInfo['email'])];
+                    case 2:
+                        _a = (_b.sent());
+                        _b.label = 3;
                     case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.findOneAndUpdate({ 'email': new_user['email'] }, new_user)];
+                        if (_a) {
+                            console.log("user not found!\n" + userInfo);
+                            return [2 /*return*/, false];
+                        }
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).findOneAndReplace({ 'email': userInfo['email'] }, new_user);
+                                this.client.close();
+                                return result !== null;
+                            })["catch"](function (err) { console.log(err); })];
                     case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_5 = _a.sent();
-                        console.log(error_5);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _b.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.delete_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // userinfo format:
+                        // {email:'xxx', username: 'xxx', password:'xxx'}
+                        // function will return true if user information is successfully deleted
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.userDatabase);
+                        // console.log('Running delete user, the input is: ');
+                        // console.log(userInfo);
+                        // try {
+                        //     let result = await collection.remove(
+                        //         {'email': userInfo['email']}
+                        //     );
+                        //     console.log("result = " + result);    
+                        //     return true;
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log('Running delete user, the input is: ' + userInfo);
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.userDatabase).remove({ 'email': userInfo['email'] });
+                                this.client.close();
+                                return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.userDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running delete user, the input is: ');
-                        console.log(userInfo);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.remove({ 'email': userInfo['email'] })];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_6 = _a.sent();
-                        console.log(error_6);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
@@ -291,111 +351,119 @@ var Database = /** @class */ (function () {
     // TODO: implement create, update, delete a post
     Database.prototype.create_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, data, result, error_7;
+            var data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
-                    case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.postDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running create post, the input is: ');
-                        console.log(post);
+                    case 0:
                         data = {
                             '_id': Date.now().toString(),
                             'title': post['title'],
                             'username': post['username'],
-                            'content': post['content']
+                            'content': post['content'],
+                            'updated': -1
                         };
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.insertOne(data)];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_7 = _a.sent();
-                        console.log(error_7);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        console.log('Running create post, the input is: ' + post);
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.postDatabase).insertOne(data);
+                                this.client.close();
+                                return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
+                            })["catch"](function (err) { console.log(err); })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.update_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_8;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // post format:
+                        /* {_id: 'a unique id for that post', username: 'xxx', title: 'xxx', content: '......'}*/
+                        //return true when post is updated
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.postDatabase);
+                        // console.log('Running update post, the input is: ');
+                        // console.log(post);
+                        // try {
+                        //     let result = await collection.findOneAndUpdate(
+                        //         {'_id':post['_id']},
+                        //         {
+                        //             '_id' : Date.now().toString(),
+                        //             'title' : post['title'],
+                        //             'username' : post['username'],
+                        //             'content' : post['content']
+                        //         }
+                        //     );
+                        //     console.log("result = " + result);    
+                        //     return true;
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log('Running create post, the input is: ' + post);
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.postDatabase).findOneAndUpdate({ '_id': post['_id'] }, {
+                                    $set: {
+                                        'title': post['title'],
+                                        'username': post['username'],
+                                        'content': post['content'],
+                                        'updated': Date.now().toString()
+                                    }
+                                });
+                                this.client.close();
+                                return result !== null;
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.postDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running update post, the input is: ');
-                        console.log(post);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.findOneAndUpdate({ '_id': post['_id'] }, {
-                                '_id': Date.now().toString(),
-                                'title': post['title'],
-                                'username': post['username'],
-                                'content': post['content']
-                            })];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_8 = _a.sent();
-                        console.log(error_8);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
     Database.prototype.delete_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_9;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.client.db(this.dbName)];
+                    case 0:
+                        // post format:
+                        /* {username: 'xxx', date: Date, title: 'xxx', content: '......'}*/
+                        //return true when post is deleted
+                        // let db = await this.client.db(this.dbName);
+                        // let collection = await db.collection(this.postDatabase);
+                        // console.log('Running delete post, the input is: ');
+                        // console.log(post);
+                        // try {
+                        //     let result = await collection.remove(
+                        //         {'_id': post['_id']}
+                        //     );
+                        //     console.log("result = " + result);    
+                        //     return true;
+                        // } catch (error) {
+                        //     console.log(error);
+                        //     console.log('falied');
+                        //     return false
+                        // }
+                        console.log('Running delete post, the input is: ' + post);
+                        return [4 /*yield*/, this.client.connect(function (err, db) {
+                                var result = db.collection(this.postDatabase).remove(post);
+                                this.client.close();
+                                return result['nRemoved'] === 1;
+                            })["catch"](function (err) { console.log(err); })];
                     case 1:
-                        db = _a.sent();
-                        return [4 /*yield*/, db.collection(this.postDatabase)];
-                    case 2:
-                        collection = _a.sent();
-                        console.log('Running delete post, the input is: ');
-                        console.log(post);
-                        _a.label = 3;
-                    case 3:
-                        _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.remove({ '_id': post['_id'] })];
-                    case 4:
-                        result = _a.sent();
-                        console.log("result = " + result);
-                        return [2 /*return*/, true];
-                    case 5:
-                        error_9 = _a.sent();
-                        console.log(error_9);
-                        console.log('falied');
-                        return [2 /*return*/, false];
-                    case 6: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, false]; //if this line is reached then an error happened during connection
                 }
             });
         });
     };
+    //I have no idea how we're going to specify which post to read, so I've left this one as is
     Database.prototype.read_post = function (page) {
         return __awaiter(this, void 0, void 0, function () {
-            var db, collection, result, error_10;
+            var db, collection, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.client.db(this.dbName)];
@@ -415,8 +483,8 @@ var Database = /** @class */ (function () {
                         console.log("result = " + result);
                         return [2 /*return*/, result];
                     case 5:
-                        error_10 = _a.sent();
-                        console.log(error_10);
+                        error_1 = _a.sent();
+                        console.log(error_1);
                         console.log('falied');
                         return [2 /*return*/, null];
                     case 6: return [2 /*return*/];
