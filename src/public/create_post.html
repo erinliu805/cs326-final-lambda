@@ -37,13 +37,18 @@
 		</div>
     </nav>
     <div class="create_post">
-        <form action="/create_post" method="post">
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title">
-            <label for="content">Content</label>
-            <input type="text" name="content" id="content">
-            <button type="submit">submit</button>
-        </form>
+		<form action="/create_post" method="post">
+			<label for="title" id="title" class="danger" hidden>Title</label>
+            <input type="text" name="title" id="title" placeholder="Title">
+            <label for="content" id="content">Content</label>
+            <input type="text" name="content" id="content" placeholder="content">
+            <button onclick="create_post()" type="submit">submit</button>
+		</form>
+		<div class="col">
+			<p id="output" style="font-size: xx-large;">
+		  	<small style="font-size: small;"></small>
+			</p>
+  		</div>
     </div>
 
         

@@ -69,6 +69,8 @@ export class MyServer {
             next();
         });
 
+        //TO Do 
+        // before go to profile, check if the user log in
         this.router.get('/profile', async (request, response, next) => {
             let file_path = path.join(__dirname, 'public/profile.html');
             let data = fs.readFileSync(file_path);

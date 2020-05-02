@@ -148,10 +148,13 @@ export class Database {
         //     return false
         // }
         console.log('Running add user, the input is: ' + userInfo);
+        //TO DO
+        //identify user by a randomly-generalized id
         let new_user = {
             'email' : userInfo['email'],
             'username' : userInfo['username'],
-            'hashedpassword' : bcrypt.hashSync(userInfo['password'], 10).toString()
+            'hashedpassword' : bcrypt.hashSync(userInfo['password'], 10).toString(),
+            'login': 0
         }
         if(!(await this.check_username(userInfo['username'])) || !(await this.check_email(userInfo['email']))) {
             console.log("username or email has been used before!\n" + userInfo);
@@ -164,6 +167,34 @@ export class Database {
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
     } 
+
+    public async login_user(userInfo) : Promise<boolean> {
+        console.log('Log in user, the input is: ' + userInfo);
+        //TO DO
+        //identify user by a randomly-generalized id
+        //TO DO 
+        //Check if the login field is 1, only when logged in can user change its info
+        if(userInfo['login']=== '1') { 
+            console.log("user has already log in!\n" + userInfo);
+            return true;
+        }
+        let new_user = {
+            'email' : userInfo['email'],
+            'username' : userInfo['username'],
+            'hashedpassword' : bcrypt.hashSync(userInfo['password'], 10).toString()
+        }
+        if((await this.check_username(userInfo['username'])) && (await this.check_email(userInfo['email']))) {
+            console.log("user not found!\n" + userInfo);
+            return false;
+        }
+        await this.client.connect(this.uri, function(err, db) {
+            let result = db.collection(this.userDatabase).findOneAndReplace({'login' : '1'}, new_user);
+            this.client.close();
+            return result !== null;
+        }).catch(err => { console.log(err); });
+        return false;//if this line is reached then an error happened during connection
+    }   
+
 
     public async update_user(userInfo) : Promise<boolean> {
         // userinfo format:
@@ -192,6 +223,14 @@ export class Database {
         //     return false
         // }
         console.log('Running update user, the input is: ' + userInfo);
+        //TO DO
+        //identify user by a randomly-generalized id
+
+        //Check if the login field is 1, only when logged in can user change its info
+        if(userInfo['login']!== '1') { 
+            console.log("user not log in!\n" + userInfo);
+            return false;
+        }
         let new_user = {
             'email' : userInfo['email'],
             'username' : userInfo['username'],
@@ -269,7 +308,8 @@ export class Database {
             'title' : post['title'],
             'username' : post['username'],
             'content' : post['content'],
-            'updated' : -1
+            'updated' : -1,
+            'user_id':-1
         }
         console.log('Running create post, the input is: ' + post);
         await this.client.connect(this.uri, function(err, db) {
