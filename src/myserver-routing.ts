@@ -81,7 +81,7 @@ export class MyServer {
             next();
         });
 
-        this.router.get('/create_post', async (request, response, next) => {
+        this.router.get('/create_post', this.isLoggedIn, async (request, response, next) => {
             if (request.isAuthenticated()){
                 let file_path = path.join(__dirname, 'public/create_post.html');
                 let data = fs.readFileSync(file_path);
@@ -135,7 +135,7 @@ export class MyServer {
         })
 
         this.router.post('/register', this.registerHandler.bind(this));
-        this.router.post('/create_post', this.createPostHandler.bind(this));
+        this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.app.use('/', this.router);
     }
@@ -225,20 +225,19 @@ export class MyServer {
         console.log('Create post')
         console.dir(request.user)
         let data = {
+            '_id': Date.now().toString(),
             'userID' : request.user._id,
             'username': request.user.username,
             'title': request.body.title,
             'content': request.body.content,
-            'id': Date.now().toString()
         };
-
         console.log(data);
         // add this post into the database
         if(await this.theDatabase.create_post(data)){
-            response.write("success");
+            response.write(this.successMsg);
             response.end();
         } else {
-            response.write('failed');
+            response.write(this.failMsg);
             response.end();
         }
         next();

@@ -275,7 +275,7 @@ export class Database {
         }
     }
 
-    public async read_post(page: number) : Promise<JSON> {
+    public async read_post(page) : Promise<JSON> {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......'}*/
         //return true when post is deleted
@@ -283,10 +283,20 @@ export class Database {
         let collection = await db.collection(this.postDatabase);
         console.log('Running read post, the input is: ');
         console.log(page);
+        let p = parseInt(page.toString()) + 0;
         try {
-            let result = await collection.findOne().skip(page);
-            console.log("result = " + result);
-            return result;
+            if (p === NaN){
+                let result = await collection.find().limit(1).toArray();
+                console.log("result = ");
+                console.dir(result[0])
+                return result[0];
+            } else {
+                let result = await collection.find().skip(p).limit(1).toArray();
+                console.log("result = ");
+                console.dir(result[0])
+                return result[0];
+            }
+
         } catch (error) {
             console.log(error);
             console.log('falied');

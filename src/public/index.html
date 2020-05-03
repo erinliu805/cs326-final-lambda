@@ -14,7 +14,8 @@
 		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
 		crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="css/main.css">
-	<script src="js/client.js"></script>
+	<link rel="stylesheet" href="css/posts.css">
+	<script src="js/index-xhr.js"></script>
 	<title>Amherst Housing Forum</title>
 </head>
 
@@ -37,7 +38,7 @@
 					<a class="nav-link" href="/posts">Trending</a>
 				</li>
 				<li class="nav-item active">
-					<a class="nav-link" href="#"></a>
+					<a class="nav-link" href="/create_post">Make a Post</a>
 				</li>
 			</ul>
 		</div>
@@ -112,7 +113,11 @@
 
 		</div>
 
-		<script src="readPost()"></script>
+	</div>
+	<div class="container post-section" id="posts">
+
+		<div class="btn btn-primary center" onclick="readPost()">Read More</div>
+
 	</div>
 
 </body>

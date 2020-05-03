@@ -1,7 +1,4 @@
-// const loginURL = "https://aqueous-dusk-44841.herokuapp.com/login"; 
-// const homeURL = "https://aqueous-dusk-44841.herokuapp.com/"; 
-
-const loginURL='http://localhost:8080/login'
+const createURL='http://localhost:8080/create_post'
 const homeURL='http://localhost:8080'
 // NEW: helper method for posting data
 async function postData(url, data) {
@@ -21,19 +18,18 @@ async function postData(url, data) {
 }
 
 
-function login() {
+function create_post() {
     (async () => {
-    let username = document.getElementById("username").value;
-    let email = document.getElementById("email").value;
-    let password = document.getElementById("password").value;
+    let title = document.getElementById("title").value;
+    let content = document.getElementById("content").value;
 
-	const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
-	const resp = await postData(loginURL, data); 
+	const data = { 'title' : title, 'content' : content}; // -- (1)
+	const resp = await postData(createURL, data); 
 	const j = await resp.json();
 	if (j['result'] !== 'success') {
 	    document.getElementById("output").innerHTML = j['result'];
 	} else {
-		document.getElementById("output").innerHTML = "success! you will be login in a second";
+		document.getElementById("output").innerHTML = "success! you can see your post in home page";
 		setTimeout(function(){window.location.href=homeURL}, 1500) 
 	}
     })();

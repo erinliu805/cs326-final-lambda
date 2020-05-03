@@ -28,3 +28,6 @@ function readPost() {
         postSection.innerHTML = html;
         console.log("Text changed");
     })()};
+
+
+    
