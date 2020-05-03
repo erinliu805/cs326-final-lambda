@@ -37,22 +37,22 @@
     </nav>
 
     <div class="register">
-        <form method="post">
+		<form action="javascript:void(0)">
             <h2 class="sr-only">register Form</h2>
             <div class="icon"><svg class="bi bi-house-fill" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
                 <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
 			  </svg></div>
 			  <div class="container">
-					<div class="form-group"><input class="form-control" type="username" name="username" id="username" placeholder="Username"></div>
-					<label for="password" id="username-prompt" class="danger" hidden></label>
-					<div class="form-group"><input class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
-					<label for="email" id="email-prompt" class="danger" hidden></label>
-					<div class="form-group"><input class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
-					<label for="password-confirm" id="password-prompt" class="danger" hidden></label>
-					<div class="form-group"><input onkeypress="checker()" class="form-control" type="password-confirm" name="password-confirm" id="password-confirm" placeholder="Confirm Password"></div>
+					<div class="form-group"><input onchange="checker()" class="form-control" type="username" name="username" id="username" placeholder="Username"></div>
+					<label for="password" id="username-prompt" class="danger" hidden="true"></label>
+					<div class="form-group"><input onchange="checker()" class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
+					<label for="email" id="email-prompt" class="danger" hidden="true"></label>
+					<div class="form-group"><input onchange="checker()" class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
+					<label for="password-confirm" id="password-prompt" class="danger" hidden="true"></label>
+					<div class="form-group"><input onchange="checker()" class="form-control" type="password" name="password-confirm" id="password-confirm" placeholder="Confirm Password"></div>
 			  </div>
-            <div class="form-group"><button onclick="user_register()"class="btn btn-primary btn-block" type="submit">Register</button></div></form>
+            <div class="form-group"><button onclick="register()"class="btn btn-primary btn-block" type="submit">Register</button></div></form>
             <div class="col">
         		<p id="output" style="font-size: xx-large;">
           	<small style="font-size: small;"></small>

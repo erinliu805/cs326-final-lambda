@@ -135,6 +135,7 @@ export class Database {
         let collection = await db.collection(this.userDatabase);
         console.log('Running add user, the input is: ');
         let new_user = {
+            '_id': Date.now().toString(),
             'email' : userInfo['email'],
             'username' : userInfo['username'],
             'hashedpassword' : userInfo['password']
@@ -160,6 +161,7 @@ export class Database {
         let collection = await db.collection(this.userDatabase);
         console.log('Running add user, the input is: ');
         let new_user = {
+            '_id': userInfo['_id'],
             'email' : userInfo['email'],
             'username' : userInfo['username'],
             'hashedpassword' : userInfo['password']
@@ -207,7 +209,7 @@ export class Database {
     // TODO: implement create, update, delete a post
     public async create_post(post: JSON) : Promise<boolean> {
         // post format:
-        /* {id:'xxx', userID:'xxx', username: 'xxx', title: 'xxx', content: '......' }*/
+        /* {_id:'xxx', userID:'xxx', username: 'xxx', title: 'xxx', content: '......' }*/
         //return true when post is created
         let db = await this.client.db(this.dbName);
         let collection = await db.collection(this.postDatabase);

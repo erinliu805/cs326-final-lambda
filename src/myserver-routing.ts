@@ -19,7 +19,9 @@ export class MyServer {
     private app = express();
     private port = process.env.PORT;
     private router = express.Router();
-
+    private successMsg = JSON.stringify( {'result': 'success'} )
+    private failMsg = JSON.stringify( {'result': 'failed'} )
+    private serverfail = JSON.stringify({'result': 'Something goes wrong on the sercer'})
     constructor(db) {
         this.theDatabase = db;
         this.app.use(session({
@@ -28,8 +30,7 @@ export class MyServer {
             saveUninitialized: false
           }))
 
-        this.initialize_passport.bind(this)
-        this.initialize_passport()
+        this.initialize_passport.bind(this)()
         this.app.use(passport.initialize())
         this.app.use(passport.session({
             secret: process.env.SESSION_SECRET
@@ -153,16 +154,31 @@ export class MyServer {
     }
 
     private initialize_passport() {
-        let getUserByID = this.theDatabase.getUserByID
         console.log('Initializing passport')
         passport.use(new LocalStrategy({usernameField: 'email'}, this.authenticateUser.bind(this)))
-        passport.serializeUser((user, done) => done(null, user._id))
-        passport.deserializeUser((_id, done) => done(null, async() => { return await getUserByID(_id)}))
+        passport.serializeUser((user, done) => {
+            console.log('Serializer get user: ')
+            console.dir(user)
+            done(null, user._id)})
+            
+        passport.deserializeUser(async (_id, done) => {
+            console.log('DeserializeUser get _id: ')
+            console.log(_id)
+            let user = await this.theDatabase.getUserById(_id)
+            console.log('Get user: ')
+            console.dir(user)
+            done(null, user)
+        })
         return passport
     }
 
     private async authenticateUser(email, password, done){
+        console.log('AuthenticateUser is finding user with email: ')
+        console.log(email)
         let user = await this.theDatabase.getUserByEmail(email)
+        console.log('find user: ')
+        console.dir(user)
+
         if (user == null) {
             return done(null, false, {message: 'Can not find this user'})
         }
@@ -179,6 +195,7 @@ export class MyServer {
     }
 
     private async registerHandler(request, response, next) {
+        response.header('Content-type', 'application/json')
         let new_user = {
             'username': request.body.username,
             'email': request.body.email,
@@ -192,16 +209,18 @@ export class MyServer {
             if (await this.theDatabase.check_username(new_user['username']) === true &&
                 await this.theDatabase.check_email(new_user['email']) === true) {
                 await this.theDatabase.add_user(new_user);
-                response.write('success');
+                response.write(this.successMsg);
             }
             else {
                 console.log('User existed')
-                response.write('User existed');
+                //wait for 3 seconds before redirect
+                response.write(JSON.stringify({'result': 'User name or email is used'}))
             }
         } catch (error) {
+            console.log(error)
             let message = "register failed, use local memeory instead";
             console.log(message);
-            response.write('Something goes wrong');
+            response.write(this.serverfail);
             // TODO add user into the database
             users.push(new_user);
         }
@@ -244,15 +263,38 @@ export class MyServer {
                 console.log(data);
                 response.end();
             } else {
-                response.write('failed')
+                response.write(this.failMsg)
                 response.end()
             }
         } catch (error) {
             console.log(error);
-            response.write("Something goes wrong")
+            response.write(this.serverfail)
             response.end()
         }
         next();
+    }
+
+    private isLoggedIn(request, response, next){
+        if (request.isAuthenticated()){
+            next()
+        }
+        else {
+            //ask the user to login if not 
+            response.redirect('/login')
+        }
+    }
+
+    private isNotLoggedIn(request, response, next){
+        if (!request.isAuthenticated()){
+            next()
+        }
+        else {
+            //if user already login
+            response.redirect('/')
+        }
+    }
+    private async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
     }
 }
 

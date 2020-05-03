@@ -1,5 +1,5 @@
 const url = "https://aqueous-dusk-44841.herokuapp.com/login"; 
-
+const local_url='http://localhost:8080/login'
 // NEW: helper method for posting data
 async function postData(url, data) {
     const resp = await fetch(url,
@@ -25,8 +25,7 @@ function user_register() {
     let password = document.getElementById("password").value;
 
 	const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
-        const newURL = url + "/users/" + username + "/autheticate_user"; 
-        const resp = await postData(newURL, data); 
+	const resp = await postData(newURL, data); 
 	const j = await resp.json();
 	if (j['result'] !== 'error') {
 	    document.getElementById("output").innerHTML = username +  " log in.</b>";
