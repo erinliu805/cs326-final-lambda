@@ -136,14 +136,7 @@ export class MyServer {
 
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.createPostHandler.bind(this));
-        this.router.post('/login', passport.authenticate(
-            'local',
-            {
-                successRedirect:'/',
-                failureRedirect:'/login',
-                failureFlash:true
-            }
-        ), this.loginHandler.bind(this));
+        this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.app.use('/', this.router);
     }
 
@@ -259,9 +252,9 @@ export class MyServer {
         };
         try {
             if (await this.theDatabase.autheticate_user(data)){
-                response.redirect('/');
-                console.log(data);
+                response.write(this.successMsg);
                 response.end();
+                console.log(data);
             } else {
                 response.write(this.failMsg)
                 response.end()
