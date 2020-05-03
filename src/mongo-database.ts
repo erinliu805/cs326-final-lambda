@@ -27,6 +27,8 @@ export class Database {
     // ---------------------------------------------------------------- //
     // user information section
     // TODO: implement check, add, delete, update user information
+
+    
     public async check_username(username: string) : Promise<boolean> {
         // check username has been used
         // username not used, return true 
