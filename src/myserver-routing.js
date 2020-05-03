@@ -119,6 +119,8 @@ var MyServer = /** @class */ (function () {
                 return [2 /*return*/];
             });
         }); });
+        //TO Do 
+        // before go to profile, check if the user log in
         this.router.get('/profile', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
             var file_path, data;
             return __generator(this, function (_a) {

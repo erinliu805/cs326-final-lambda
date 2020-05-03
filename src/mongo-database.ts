@@ -14,12 +14,13 @@ export class Database {
     constructor(dbName: string) {
 	    this.dbName = dbName;
         this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
-    
+        var mongoclient = this.client;
 	    (async () => {
 	        await this.client.connect(function(err, db) {
+                if(err !== null) console.log(err);
                 console.log("connection established");
-                this.client.close();
-            }).catch(err => { console.log(err); });
+                mongoclient.close();
+            });
 	    })();
     }
 
@@ -48,10 +49,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log("checking if username " + username + " has been used");
         await this.client.connect(function(err, db) {
             let result : number = db.collection(this.userDatabase).find({"username" : username}).count();
-            this.client.close();
+            mongoclient.close();
             return result === 0;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -78,10 +80,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log("checking if email " + email + " has been used");
         await this.client.connect(function(err, db) {
             let result : number = db.collection(this.userDatabase).find({"email" : email}).count();
-            this.client.close();
+            mongoclient.close();
             return result === 0;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -115,10 +118,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log("authenticating user " + loginInfo);
         await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).findOne({"email" : loginInfo['email']});
-            this.client.close();
+            mongoclient.close();
             return bcrypt.compare(loginInfo['password'], result['hashedpassword']);
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -147,6 +151,7 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log('Running add user, the input is: ' + userInfo);
         //TO DO
         //identify user by a randomly-generalized id
@@ -162,7 +167,7 @@ export class Database {
         }
         await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).insertOne(new_user);
-            this.client.close();
+            mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -174,6 +179,7 @@ export class Database {
         //identify user by a randomly-generalized id
         //TO DO 
         //Check if the login field is 1, only when logged in can user change its info
+        var mongoclient = this.client;
         if(userInfo['login']=== '1') { 
             console.log("user has already log in!\n" + userInfo);
             return true;
@@ -189,7 +195,7 @@ export class Database {
         }
         await this.client.connect(this.uri, function(err, db) {
             let result = db.collection(this.userDatabase).findOneAndReplace({'login' : '1'}, new_user);
-            this.client.close();
+            mongoclient.close();
             return result !== null;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -227,6 +233,7 @@ export class Database {
         //identify user by a randomly-generalized id
 
         //Check if the login field is 1, only when logged in can user change its info
+        var mongoclient = this.client;
         if(userInfo['login']!== '1') { 
             console.log("user not log in!\n" + userInfo);
             return false;
@@ -242,7 +249,7 @@ export class Database {
         }
         await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).findOneAndReplace({'email' : userInfo['email']}, new_user);
-            this.client.close();
+            mongoclient.close();
             return result !== null;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -268,10 +275,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log('Running delete user, the input is: ' + userInfo);
         await this.client.connect(function(err, db) {
             let result = db.collection(this.userDatabase).remove({'email' : userInfo['email']});
-            this.client.close();
+            mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -303,6 +311,7 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         let data = {
             '_id' : Date.now().toString(),
             'title' : post['title'],
@@ -314,7 +323,7 @@ export class Database {
         console.log('Running create post, the input is: ' + post);
         await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).insertOne(data);
-            this.client.close();
+            mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -346,6 +355,7 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log('Running create post, the input is: ' + post);
         await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).findOneAndUpdate(
@@ -359,7 +369,7 @@ export class Database {
                     }
                 }
             );
-            this.client.close();
+            mongoclient.close();
             return result !== null;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
@@ -384,17 +394,20 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var mongoclient = this.client;
         console.log('Running delete post, the input is: ' + post);
         await this.client.connect(function(err, db) {
             let result = db.collection(this.postDatabase).remove(post);
-            this.client.close();
+            mongoclient.close();
             return result['nRemoved'] === 1;
         }).catch(err => { console.log(err); });
         return false;//if this line is reached then an error happened during connection
     }
 
     //I have no idea how we're going to specify which post to read, so I've left this one as is
+
     public async read_post(page: number) : Promise<JSON> {
+        var mongoclient = this.client;
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......'}*/
         //return true when post is deleted
