@@ -41,15 +41,33 @@ var url = require('url');
 var express = require('express');
 var fs = require('fs');
 var users = [];
-var posts = [];
 var path = require('path');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
+var session = require('express-session');
+var flash = require('express-flash');
 var MyServer = /** @class */ (function () {
     function MyServer(db) {
         var _this = this;
         this.app = express();
         this.port = process.env.PORT;
         this.router = express.Router();
+        this.successMsg = JSON.stringify({ 'result': 'success' });
+        this.failMsg = JSON.stringify({ 'result': 'failed' });
+        this.serverfail = JSON.stringify({ 'result': 'Something goes wrong on the sercer' });
         this.theDatabase = db;
+        this.app.use(session({
+            secret: process.env.SESSION_SECRET,
+            resave: false,
+            saveUninitialized: false
+        }));
+        this.initialize_passport.bind(this)();
+        this.app.use(passport.initialize());
+        this.app.use(passport.session({
+            secret: process.env.SESSION_SECRET
+        }));
+        this.app.use(flash());
         this.router.use(function (request, response, next) {
             response.header('Content-Type', 'application/json');
             response.header('Access-Control-Allow-Origin', '*');
@@ -107,14 +125,19 @@ var MyServer = /** @class */ (function () {
                 return [2 /*return*/];
             });
         }); });
-        this.router.get('/create_post', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+        this.router.get('/create_post', this.isLoggedIn, function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
             var file_path, data;
             return __generator(this, function (_a) {
-                file_path = path.join(__dirname, 'public/create_post.html');
-                data = fs.readFileSync(file_path);
-                response.header('Content-Type', 'text/html');
-                response.write(data);
-                response.end();
+                if (request.isAuthenticated()) {
+                    file_path = path.join(__dirname, 'public/create_post.html');
+                    data = fs.readFileSync(file_path);
+                    response.header('Content-Type', 'text/html');
+                    response.write(data);
+                    response.end();
+                }
+                else {
+                    response.redirect('/login');
+                }
                 next();
                 return [2 /*return*/];
             });
@@ -176,13 +199,78 @@ var MyServer = /** @class */ (function () {
             });
         }); });
         this.router.post('/register', this.registerHandler.bind(this));
-        this.router.post('/create_post', this.createPostHandler.bind(this));
-        this.router.post('/login', this.loginHandler.bind(this));
+        this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.app.use('/', this.router);
     }
     MyServer.prototype.listen = function (port) {
-        console.log("Listening at port:" + port);
-        this.app.listen(port);
+        var p = port || 8080;
+        console.log("Listening at port:" + p);
+        this.app.listen(p);
+    };
+    MyServer.prototype.initialize_passport = function () {
+        var _this = this;
+        console.log('Initializing passport');
+        passport.use(new LocalStrategy({ usernameField: 'email' }, this.authenticateUser.bind(this)));
+        passport.serializeUser(function (user, done) {
+            console.log('Serializer get user: ');
+            console.dir(user);
+            done(null, user._id);
+        });
+        passport.deserializeUser(function (_id, done) { return __awaiter(_this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('DeserializeUser get _id: ');
+                        console.log(_id);
+                        return [4 /*yield*/, this.theDatabase.getUserById(_id)];
+                    case 1:
+                        user = _a.sent();
+                        console.log('Get user: ');
+                        console.dir(user);
+                        done(null, user);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        return passport;
+    };
+    MyServer.prototype.authenticateUser = function (email, password, done) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('AuthenticateUser is finding user with email: ');
+                        console.log(email);
+                        return [4 /*yield*/, this.theDatabase.getUserByEmail(email)];
+                    case 1:
+                        user = _a.sent();
+                        console.log('find user: ');
+                        console.dir(user);
+                        if (user == null) {
+                            return [2 /*return*/, done(null, false, { message: 'Can not find this user' })];
+                        }
+                        _a.label = 2;
+                    case 2:
+                        _a.trys.push([2, 4, , 5]);
+                        return [4 /*yield*/, bcrypt.compare(password, user.hashedpassword)];
+                    case 3:
+                        if (_a.sent()) {
+                            return [2 /*return*/, done(null, user)];
+                        }
+                        else {
+                            return [2 /*return*/, done(null, false, { message: 'Password incorrect' })];
+                        }
+                        return [3 /*break*/, 5];
+                    case 4:
+                        e_1 = _a.sent();
+                        return [2 /*return*/, done(e_1)];
+                    case 5: return [2 /*return*/];
+                }
+            });
+        });
     };
     MyServer.prototype.registerHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
@@ -190,6 +278,7 @@ var MyServer = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        response.header('Content-type', 'application/json');
                         new_user = {
                             'username': request.body.username,
                             'email': request.body.email,
@@ -212,18 +301,20 @@ var MyServer = /** @class */ (function () {
                         return [4 /*yield*/, this.theDatabase.add_user(new_user)];
                     case 5:
                         _b.sent();
-                        response.write('success');
+                        response.write(this.successMsg);
                         return [3 /*break*/, 7];
                     case 6:
                         console.log('User existed');
-                        response.write('User existed');
+                        //wait for 3 seconds before redirect
+                        response.write(JSON.stringify({ 'result': 'User name or email is used' }));
                         _b.label = 7;
                     case 7: return [3 /*break*/, 9];
                     case 8:
                         error_1 = _b.sent();
+                        console.log(error_1);
                         message = "register failed, use local memeory instead";
                         console.log(message);
-                        response.write('Something goes wrong');
+                        response.write(this.serverfail);
                         // TODO add user into the database
                         users.push(new_user);
                         return [3 /*break*/, 9];
@@ -241,8 +332,12 @@ var MyServer = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        console.log('Create post');
+                        console.dir(request.user);
                         data = {
-                            'username': request.body.username,
+                            '_id': Date.now().toString(),
+                            'userID': request.user._id,
+                            'username': request.user.username,
                             'title': request.body.title,
                             'content': request.body.content
                         };
@@ -251,11 +346,11 @@ var MyServer = /** @class */ (function () {
                     case 1:
                         // add this post into the database
                         if (_a.sent()) {
-                            response.write("success");
+                            response.write(this.successMsg);
                             response.end();
                         }
                         else {
-                            response.write('failed');
+                            response.write(this.failMsg);
                             response.end();
                         }
                         next();
@@ -270,6 +365,7 @@ var MyServer = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        response.header('Content-type', 'application/json');
                         data = {
                             'email': request.body.email,
                             'password': request.body.password
@@ -280,25 +376,50 @@ var MyServer = /** @class */ (function () {
                         return [4 /*yield*/, this.theDatabase.autheticate_user(data)];
                     case 2:
                         if (_a.sent()) {
-                            response.write('success');
-                            console.log(data);
+                            response.write(this.successMsg);
                             response.end();
+                            console.log(data);
                         }
                         else {
-                            response.write('failed');
+                            response.write(this.failMsg);
                             response.end();
                         }
                         return [3 /*break*/, 4];
                     case 3:
                         error_2 = _a.sent();
                         console.log(error_2);
-                        response.write("Something goes wrong");
+                        response.write(this.serverfail);
                         response.end();
                         return [3 /*break*/, 4];
                     case 4:
                         next();
                         return [2 /*return*/];
                 }
+            });
+        });
+    };
+    MyServer.prototype.isLoggedIn = function (request, response, next) {
+        if (request.isAuthenticated()) {
+            next();
+        }
+        else {
+            //ask the user to login if not 
+            response.redirect('/login');
+        }
+    };
+    MyServer.prototype.isNotLoggedIn = function (request, response, next) {
+        if (!request.isAuthenticated()) {
+            next();
+        }
+        else {
+            //if user already login
+            response.redirect('/');
+        }
+    };
+    MyServer.prototype.sleep = function (ms) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, new Promise(function (resolve) { return setTimeout(resolve, ms); })];
             });
         });
     };

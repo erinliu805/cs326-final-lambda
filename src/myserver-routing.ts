@@ -1,20 +1,41 @@
 import { fstat } from "fs";
 import { request } from "http";
+import { doesNotMatch } from "assert";
 
 let http = require('http');
 let url = require('url');
 let express = require('express');
 let fs = require('fs');
 let users = [];
-let posts = [];
 let path = require('path')
+let passport = require('passport')
+let LocalStrategy = require('passport-local').Strategy;
+let bcrypt = require('bcrypt')
+let session = require('express-session')
+let flash = require('express-flash')
+
 export class MyServer {
     private theDatabase;
     private app = express();
     private port = process.env.PORT;
     private router = express.Router();
+    private successMsg = JSON.stringify( {'result': 'success'} )
+    private failMsg = JSON.stringify( {'result': 'failed'} )
+    private serverfail = JSON.stringify({'result': 'Something goes wrong on the sercer'})
     constructor(db) {
         this.theDatabase = db;
+        this.app.use(session({
+            secret: process.env.SESSION_SECRET,
+            resave: false,
+            saveUninitialized: false
+          }))
+
+        this.initialize_passport.bind(this)()
+        this.app.use(passport.initialize())
+        this.app.use(passport.session({
+            secret: process.env.SESSION_SECRET
+        }))
+        this.app.use(flash())
         this.router.use((request, response, next) => {
             response.header('Content-Type', 'application/json');
             response.header('Access-Control-Allow-Origin', '*');
@@ -60,12 +81,17 @@ export class MyServer {
             next();
         });
 
-        this.router.get('/create_post', async (request, response, next) => {
-            let file_path = path.join(__dirname, 'public/create_post.html');
-            let data = fs.readFileSync(file_path);
-            response.header('Content-Type', 'text/html');
-            response.write(data);
-            response.end();
+        this.router.get('/create_post', this.isLoggedIn, async (request, response, next) => {
+            if (request.isAuthenticated()){
+                let file_path = path.join(__dirname, 'public/create_post.html');
+                let data = fs.readFileSync(file_path);
+                response.header('Content-Type', 'text/html');
+                response.write(data);
+                response.end();
+            }
+            else {
+                response.redirect('/login')
+            }
             next();
         });
 
@@ -109,17 +135,60 @@ export class MyServer {
         })
 
         this.router.post('/register', this.registerHandler.bind(this));
-        this.router.post('/create_post', this.createPostHandler.bind(this));
-        this.router.post('/login', this.loginHandler.bind(this));
+        this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.app.use('/', this.router);
     }
 
     public listen(port): void {
-        console.log("Listening at port:" + port);
-        this.app.listen(port);
+        let p = port || 8080
+        console.log("Listening at port:" + p);
+        this.app.listen(p);
+    }
+
+    private initialize_passport() {
+        console.log('Initializing passport')
+        passport.use(new LocalStrategy({usernameField: 'email'}, this.authenticateUser.bind(this)))
+        passport.serializeUser((user, done) => {
+            console.log('Serializer get user: ')
+            console.dir(user)
+            done(null, user._id)})
+            
+        passport.deserializeUser(async (_id, done) => {
+            console.log('DeserializeUser get _id: ')
+            console.log(_id)
+            let user = await this.theDatabase.getUserById(_id)
+            console.log('Get user: ')
+            console.dir(user)
+            done(null, user)
+        })
+        return passport
+    }
+
+    private async authenticateUser(email, password, done){
+        console.log('AuthenticateUser is finding user with email: ')
+        console.log(email)
+        let user = await this.theDatabase.getUserByEmail(email)
+        console.log('find user: ')
+        console.dir(user)
+
+        if (user == null) {
+            return done(null, false, {message: 'Can not find this user'})
+        }
+
+        try {
+            if (await bcrypt.compare(password, user.hashedpassword)) {
+                return done(null, user)
+            } else {
+                return done(null, false, {message: 'Password incorrect'})
+            }
+        } catch(e){
+            return done(e)
+        }
     }
 
     private async registerHandler(request, response, next) {
+        response.header('Content-type', 'application/json')
         let new_user = {
             'username': request.body.username,
             'email': request.body.email,
@@ -133,16 +202,18 @@ export class MyServer {
             if (await this.theDatabase.check_username(new_user['username']) === true &&
                 await this.theDatabase.check_email(new_user['email']) === true) {
                 await this.theDatabase.add_user(new_user);
-                response.write('success');
+                response.write(this.successMsg);
             }
             else {
                 console.log('User existed')
-                response.write('User existed');
+                //wait for 3 seconds before redirect
+                response.write(JSON.stringify({'result': 'User name or email is used'}))
             }
         } catch (error) {
+            console.log(error)
             let message = "register failed, use local memeory instead";
             console.log(message);
-            response.write('Something goes wrong');
+            response.write(this.serverfail);
             // TODO add user into the database
             users.push(new_user);
         }
@@ -151,43 +222,71 @@ export class MyServer {
     }
 
     private async createPostHandler(request, response, next){
+        console.log('Create post')
+        console.dir(request.user)
         let data = {
-            'username': request.body.username,
+            '_id': Date.now().toString(),
+            'userID' : request.user._id,
+            'username': request.user.username,
             'title': request.body.title,
             'content': request.body.content,
         };
         console.log(data);
         // add this post into the database
         if(await this.theDatabase.create_post(data)){
-            response.write("success");
+            response.write(this.successMsg);
             response.end();
         } else {
-            response.write('failed');
+            response.write(this.failMsg);
             response.end();
         }
         next();
     }
 
     private async loginHandler(request, response, next){
+        response.header('Content-type', 'application/json')
         let data = {
             'email': request.body.email,
             'password': request.body.password
         };
         try {
             if (await this.theDatabase.autheticate_user(data)){
-                response.write('success');
-                console.log(data);
+                response.write(this.successMsg);
                 response.end();
+                console.log(data);
             } else {
-                response.write('failed')
+                response.write(this.failMsg)
                 response.end()
             }
         } catch (error) {
             console.log(error);
-            response.write("Something goes wrong")
+            response.write(this.serverfail)
             response.end()
         }
         next();
+    }
+
+    private isLoggedIn(request, response, next){
+        if (request.isAuthenticated()){
+            next()
+        }
+        else {
+            //ask the user to login if not 
+            response.redirect('/login')
+        }
+    }
+
+    private isNotLoggedIn(request, response, next){
+        if (!request.isAuthenticated()){
+            next()
+        }
+        else {
+            //if user already login
+            response.redirect('/')
+        }
+    }
+    private async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
     }
 }
 
