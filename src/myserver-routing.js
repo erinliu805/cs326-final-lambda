@@ -46,7 +46,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcrypt');
 var session = require('express-session');
-var flash = require('express-flash');
+//let flash = require('express-flash')
 var MyServer = /** @class */ (function () {
     function MyServer(db) {
         var _this = this;
@@ -67,7 +67,7 @@ var MyServer = /** @class */ (function () {
         this.app.use(passport.session({
             secret: process.env.SESSION_SECRET
         }));
-        this.app.use(flash());
+        // this.app.use(flash())
         this.router.use(function (request, response, next) {
             response.header('Content-Type', 'application/json');
             response.header('Access-Control-Allow-Origin', '*');

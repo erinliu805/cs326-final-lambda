@@ -12,7 +12,7 @@ let passport = require('passport')
 let LocalStrategy = require('passport-local').Strategy;
 let bcrypt = require('bcrypt')
 let session = require('express-session')
-let flash = require('express-flash')
+//let flash = require('express-flash')
 
 export class MyServer {
     private theDatabase;
@@ -35,7 +35,7 @@ export class MyServer {
         this.app.use(passport.session({
             secret: process.env.SESSION_SECRET
         }))
-        this.app.use(flash())
+        // this.app.use(flash())
         this.router.use((request, response, next) => {
             response.header('Content-Type', 'application/json');
             response.header('Access-Control-Allow-Origin', '*');
