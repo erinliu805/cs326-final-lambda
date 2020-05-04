@@ -22,23 +22,28 @@ async function postData(url, data) {
 
 
 function checker() {
-		console.log('running checker')
+	async () => {
 		let username = document.getElementById("username").value;
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
-		
-		//check if password has at least one number, one upper case and one lower case
-		
-		if (password !== confirmPassword) {
+		if (password == confirmPassword) {
+			if (password.value.match(/[a-z]/g) && password.value.match(/[A-Z]/g) && password.value.match(/[0-9]/g)&& password.value.length>=8){
+				document.getElementById("password-prompt").addAttribute('hidden');
+			}
+			else{
+				let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
+				document.getElementById("password-prompt").removeAttribute('hidden');
+				document.getElementById("password-prompt").innerHTML = message;
+			}
+		}
+		if (password != confirmPassword) {
 			let message = "Two password not the same";
-			document.getElementById("password-prompt").removeAttribute("hidden");
-			document.getElementById("password-prompt").innerHTML = "Two password not the same";
-			console.log(message)
+			document.getElementById("password-prompt").removeAttribute('hidden');
+			document.getElementById("password-prompt").innerHTML = message;
 		}
-		if (password === confirmPassword) {
-			document.getElementById("password-prompt").setAttribute("hidden", "true");
-		}
+		
+	}
 };
 
 

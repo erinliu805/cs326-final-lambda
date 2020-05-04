@@ -136,6 +136,7 @@ export class MyServer {
 
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.app.use('/', this.router);
     }
@@ -220,6 +221,38 @@ export class MyServer {
         response.end();
         next();
     }
+
+    private async profileHandler(request, response, next){
+        response.header('Content-type', 'application/json')
+        let update_user = {
+            'username': request.body.username,
+            'email': request.body.email,
+            'password': request.body.password
+        };
+        let autheticate_user = {
+            'email': request.body.email,
+            'password': request.body.password
+        };
+        console.log(update_user);
+        try {
+            if (await this.theDatabase.autheticate_user(autheticate_user) === true ) {
+                await this.theDatabase.update_user(update_user);
+                response.write(this.successMsg);
+            }
+            else {
+                console.log('User info not matched')
+                response.write(JSON.stringify({'result': 'User info not matched'}))
+            }
+        } catch (error) {
+            console.log(error)
+            let message = "the user can not modify.";
+            console.log(message);
+            response.write(this.serverfail);
+        }
+        response.end();
+        next();
+    }
+        
 
     private async createPostHandler(request, response, next){
         console.log('Create post')
