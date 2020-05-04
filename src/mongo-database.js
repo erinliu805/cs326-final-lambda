@@ -48,7 +48,12 @@ var Database = /** @class */ (function () {
         this.postDatabase = "post-db";
         this.topicDatabase = "topic-db";
         this.dbName = dbName;
-        this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
+        try {
+            this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
+        }
+        catch (err) {
+            console.log(err);
+        }
         var mongoclient = this.client;
         (function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {

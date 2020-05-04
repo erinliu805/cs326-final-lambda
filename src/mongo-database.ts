@@ -49,10 +49,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var userDatabase = this.userDatabase;
         var mongoclient = this.client;
         console.log("checking if username " + username + " has been used");
         await this.client.connect(function(err, db) {
-            let result : number = db.collection(this.userDatabase).find({"username" : username}).count();
+            let result : number = db.collection(userDatabase).find({"username" : username}).count();
             mongoclient.close();
             return result === 0;
         }).catch(err => { console.log(err); });
@@ -80,10 +81,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var userDatabase = this.userDatabase;
         var mongoclient = this.client;
         console.log("checking if email " + email + " has been used");
         await this.client.connect(function(err, db) {
-            let result : number = db.collection(this.userDatabase).find({"email" : email}).count();
+            let result : number = db.collection(userDatabase).find({"email" : email}).count();
             mongoclient.close();
             return result === 0;
         }).catch(err => { console.log(err); });
@@ -118,10 +120,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var userDatabase = this.userDatabase;
         var mongoclient = this.client;
         console.log("authenticating user " + loginInfo);
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.userDatabase).findOne({"email" : loginInfo['email']});
+            let result = db.collection(userDatabase).findOne({"email" : loginInfo['email']});
             mongoclient.close();
             return bcrypt.compare(loginInfo['password'], result['hashedpassword']);
         }).catch(err => { console.log(err); });
@@ -151,6 +154,7 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var userDatabase = this.userDatabase;
         var mongoclient = this.client;
         console.log('Running add user, the input is: ' + userInfo);
         //TO DO
@@ -166,7 +170,7 @@ export class Database {
             return false;
         }
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.userDatabase).insertOne(new_user);
+            let result = db.collection(userDatabase).insertOne(new_user);
             mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
@@ -180,6 +184,7 @@ export class Database {
         //TO DO 
         //Check if the login field is 1, only when logged in can user change its info
         var mongoclient = this.client;
+        var userDatabase = this.userDatabase;
         if(userInfo['login']=== '1') { 
             console.log("user has already log in!\n" + userInfo);
             return true;
@@ -194,7 +199,7 @@ export class Database {
             return false;
         }
         await this.client.connect(this.uri, function(err, db) {
-            let result = db.collection(this.userDatabase).findOneAndReplace({'login' : '1'}, new_user);
+            let result = db.collection(userDatabase).findOneAndReplace({'login' : '1'}, new_user);
             mongoclient.close();
             return result !== null;
         }).catch(err => { console.log(err); });
@@ -234,6 +239,7 @@ export class Database {
 
         //Check if the login field is 1, only when logged in can user change its info
         var mongoclient = this.client;
+        var userDatabase = this.userDatabase;
         if(userInfo['login']!== '1') { 
             console.log("user not log in!\n" + userInfo);
             return false;
@@ -248,7 +254,7 @@ export class Database {
             return false;
         }
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.userDatabase).findOneAndReplace({'email' : userInfo['email']}, new_user);
+            let result = db.collection(userDatabase).findOneAndReplace({'email' : userInfo['email']}, new_user);
             mongoclient.close();
             return result !== null;
         }).catch(err => { console.log(err); });
@@ -275,10 +281,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var userDatabase = this.userDatabase;
         var mongoclient = this.client;
         console.log('Running delete user, the input is: ' + userInfo);
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.userDatabase).remove({'email' : userInfo['email']});
+            let result = db.collection(userDatabase).remove({'email' : userInfo['email']});
             mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
@@ -312,6 +319,7 @@ export class Database {
         //     return false
         // }
         var mongoclient = this.client;
+        var postDatabase = this.postDatabase;
         let data = {
             '_id' : Date.now().toString(),
             'title' : post['title'],
@@ -322,7 +330,7 @@ export class Database {
         }
         console.log('Running create post, the input is: ' + post);
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.postDatabase).insertOne(data);
+            let result = db.collection(postDatabase).insertOne(data);
             mongoclient.close();
             return result['acknowledged'];//default write concern is 1, which is ok since we only have 1 server
         }).catch(err => { console.log(err); });
@@ -355,10 +363,11 @@ export class Database {
         //     console.log('falied');
         //     return false
         // }
+        var postDatabase = this.postDatabase;
         var mongoclient = this.client;
         console.log('Running create post, the input is: ' + post);
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.postDatabase).findOneAndUpdate(
+            let result = db.collection(postDatabase).findOneAndUpdate(
                 {'_id':post['_id']},
                 {
                     $set : {
@@ -395,9 +404,10 @@ export class Database {
         //     return false
         // }
         var mongoclient = this.client;
+        var postDatabase = this.postDatabase;
         console.log('Running delete post, the input is: ' + post);
         await this.client.connect(function(err, db) {
-            let result = db.collection(this.postDatabase).remove(post);
+            let result = db.collection(postDatabase).remove(post);
             mongoclient.close();
             return result['nRemoved'] === 1;
         }).catch(err => { console.log(err); });
@@ -421,7 +431,7 @@ export class Database {
             return result;
         } catch (error) {
             console.log(error);
-            console.log('falied');
+            console.log('failed');
             return null
         }
     }
