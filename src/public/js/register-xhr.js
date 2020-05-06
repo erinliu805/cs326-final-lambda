@@ -27,25 +27,25 @@ function checker() {
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
+		let flag = true
 		if (password == confirmPassword) {
 			if (password.value.match(/[a-z]/g) && password.value.match(/[A-Z]/g) && password.value.match(/[0-9]/g)&& password.value.length>=8){
 				document.getElementById("password-prompt").addAttribute('hidden');
-				return true;
 			}
 			else{
 				let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
 				document.getElementById("password-prompt").removeAttribute('hidden');
 				document.getElementById("password-prompt").innerHTML = message;
-				return false;
+				flag = false
 			}
 		}
 		if (password != confirmPassword) {
 			let message = "Two password not the same";
 			document.getElementById("password-prompt").removeAttribute('hidden');
 			document.getElementById("password-prompt").innerHTML = message;
-			return false;
+			flag = false;
 		}
-		
+		return flag
 	}
 };
 
