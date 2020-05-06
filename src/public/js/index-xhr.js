@@ -1,5 +1,5 @@
-const readURL = "http://0.0.0.0:8080/read";
-// const homeURL = "https://aqueous-dusk-44841.herokuapp.com/"; 
+// const readURL = "http://0.0.0.0:8080/read";
+const readURL = "https://aqueous-dusk-44841.herokuapp.com/read"; 
 let page = 0
 
 function generateHTML(author, title, content, time) {

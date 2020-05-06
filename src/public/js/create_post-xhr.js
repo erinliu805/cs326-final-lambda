@@ -1,5 +1,7 @@
-const createURL='http://localhost:8080/create_post'
-const homeURL='http://localhost:8080'
+const url = "https://aqueous-dusk-44841.herokuapp.com/register"; 
+const loginURL = "https://aqueous-dusk-44841.herokuapp.com/login"; 
+const createURL='http://aqueous-dusk-44841.herokuapp.com/create_post'
+const homeURL='http://aqueous-dusk-44841.herokuapp.com'
 // NEW: helper method for posting data
 async function postData(url, data) {
     const resp = await fetch(url,

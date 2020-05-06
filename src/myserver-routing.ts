@@ -12,8 +12,6 @@ let passport = require('passport')
 let LocalStrategy = require('passport-local').Strategy;
 let bcrypt = require('bcrypt')
 let session = require('express-session')
-//let flash = require('express-flash')
-
 export class MyServer {
     private theDatabase;
     private app = express();
