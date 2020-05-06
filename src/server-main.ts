@@ -1,6 +1,6 @@
 'use strict';
 
-import { Database } from './mongo-database-stable';
+import { Database } from './mongo-database';
 import { MyServer } from './myserver-routing';
 let dotenv = require('dotenv');
 dotenv.config();
