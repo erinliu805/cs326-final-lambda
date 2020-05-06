@@ -199,7 +199,7 @@ var Database = /** @class */ (function () {
                             'email': userInfo['email'],
                             'username': userInfo['username'],
                             'hashedpassword': bcrypt.hashSync(userInfo['password'], 10).toString(),
-                            'login': 0
+                            '_id': Date.now().toString
                         };
                         return [4 /*yield*/, this.check_username(userInfo['username'])];
                     case 1:

@@ -44,6 +44,14 @@ function checker() {
 		document.getElementById("password-prompt").innerHTML = message;
 		flag = false;
 	}
+	if(username === null || password === null) {
+		let message = "You must provide a username and email!";
+		document.getElementById("email-prompt").removeAttribute('hidden');
+		document.getElementById("email-prompt").innerHTML = message;
+		document.getElementById("username-prompt").removeAttribute('hidden');
+		document.getElementById("username-prompt").innerHTML = message;
+		flag = false
+	}
 	return flag
 };
 
