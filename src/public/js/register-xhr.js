@@ -29,7 +29,7 @@ function checker() {
 		let confirmPassword = document.getElementById("password-confirm").value;
 		let flag = true
 		if (password == confirmPassword) {
-			if (password.value.match(/[a-z]/g) && password.value.match(/[A-Z]/g) && password.value.match(/[0-9]/g)&& password.value.length>=8){
+			if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g)&& password.length>=8){
 				document.getElementById("password-prompt").addAttribute('hidden');
 			}
 			else{
