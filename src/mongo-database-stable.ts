@@ -138,7 +138,6 @@ export class Database {
         let new_user = {
             '_id': Date.now().toString(),
             'email' : userInfo['email'],
-            'username' : userInfo['username'],
             'hashedpassword' : userInfo['password']
         }
         let hashedpassword : string = bcrypt.hashSync(userInfo['password'], 10).toString();
