@@ -44,13 +44,13 @@
                 <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
 			  </svg></div>
 			  <div class="container">
-					<div class="form-group"><input onchange="checker()" class="form-control" type="username" name="username" id="username" placeholder="Username"></div>
+					<div class="form-group"><input required onchange="checker()" class="form-control" type="username" name="username" id="username" placeholder="Username"></div>
 					<label for="password" id="username-prompt" class="danger" hidden="true"></label>
-					<div class="form-group"><input onchange="checker()" class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
+					<div class="form-group"><input required onchange="checker()" class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
 					<label for="email" id="email-prompt" class="danger" hidden="true"></label>
-					<div class="form-group"><input onchange="checker()" class="form-control" type="password" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="Password" required></div>
+					<div class="form-group"><input required onchange="checker()" class="form-control" type="password" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="Password" required></div>
 					<label for="password-confirm" id="password-prompt" class="danger" hidden="true"></label>
-					<div class="form-group"><input onchange="checker()" class="form-control" type="password" name="password-confirm" id="password-confirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="Confirm Password" required></div>
+					<div class="form-group"><input required onchange="checker()" class="form-control" type="password" name="password-confirm" id="password-confirm" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" placeholder="Confirm Password" required></div>
 			  </div>
             <div class="form-group"><button onclick="register()"class="btn btn-primary btn-block" type="submit">Register</button></div></form>
             <div class="col">

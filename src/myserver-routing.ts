@@ -45,7 +45,7 @@ export class MyServer {
         this.app.use('/', express.static('./public'));
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json());
-        this.router.get('/login', async (request, response, next) => {
+        this.router.get('/login', this.isNotLoggedIn, async (request, response, next) => {
             let file_path = path.join(__dirname, 'public/login.html');
             let data = fs.readFileSync(file_path);
             response.header('Content-Type', 'text/html');
@@ -97,7 +97,7 @@ export class MyServer {
 
         //TO Do 
         // before go to profile, check if the user log in
-        this.router.get('/profile', async (request, response, next) => {
+        this.router.get('/profile', this.isLoggedIn, async (request, response, next) => {
             let file_path = path.join(__dirname, 'public/profile.html');
             let data = fs.readFileSync(file_path);
             response.header('Content-Type', 'text/html');
@@ -124,21 +124,53 @@ export class MyServer {
             next();
         });
 
+        this.router.get('/images/:file', async (request, response, next) => {
+            //define header according to the format type
+            if (request.url.endsWith('.jpeg')){
+                response.header('Content-type', 'image/jpeg')
+            } else if (request.url.endsWith('.png')){
+                response.header('Content-type', 'image/png')
+            } else {
+                response.header('Content-type', 'image')
+            }
+            let file_path = __dirname + "/public/images/" + request.params.file
+            let data = fs.readFileSync(file_path);
+            response.write(data);
+            response.end();
+            next();
+        });
+
         this.router.get('/read/:page', async (request, response, next) => {
+            response.header('Content-type', 'application/json')
             let page : number = request.params.page
             if (page == NaN){
                 page = 0
             }
             let post = await this.theDatabase.read_post(page);
-            response.write(JSON.stringify(post));
-            response.end();
+            console.log(post)
+            if (post != undefined){
+                response.write(JSON.stringify(post));
+                response.end();
+            } else {
+                console.log(this.failMsg)
+                response.write(this.failMsg)
+                response.end();
+            }
         })
 
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
+        this.router.post('/logout', async (request, response, next)=>{
+            if (request.isAuthenticated()){
+                request.logout();
+                response.redirect('/')
+            }
+            next();
+        })
         this.app.use('/', this.router);
+        
     }
 
     public listen(port): void {
@@ -265,8 +297,12 @@ export class MyServer {
             'content': request.body.content,
         };
         console.log(data);
+        if (data.title == null || data.content == null){
+            response.write(this.failMsg);
+            response.end();
+        }
         // add this post into the database
-        if(await this.theDatabase.create_post(data)){
+        else if(await this.theDatabase.create_post(data)){
             response.write(this.successMsg);
             response.end();
         } else {
@@ -315,7 +351,7 @@ export class MyServer {
         }
         else {
             //if user already login
-            response.redirect('/')
+            response.redirect('/profile')
         }
     }
     private async sleep(ms) {

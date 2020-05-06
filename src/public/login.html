@@ -28,7 +28,7 @@
 			  <a class="nav-link" href="/posts">Trending</a>
 			</li>
 			<li class="nav-item active">
-			  <a class="nav-link" href="/"></a>
+			  <a class="nav-link" href="/create_post">Make a Post</a>
 			</li>
 		  </ul>
 		</div>
@@ -45,9 +45,8 @@
                 <path fill-rule="evenodd" d="M8 3.293l6 6V13.5a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 012 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5z" clip-rule="evenodd"/>
                 <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 011.414 0l6.647 6.646a.5.5 0 01-.708.708L8 2.207 1.354 8.854a.5.5 0 11-.708-.708L7.293 1.5z" clip-rule="evenodd"/>
               </svg></div>
-              <div class="form-group"><input class="form-control" type="username" name="username" id="username" placeholder="username"></div>
-            <div class="form-group"><input class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
-            <div class="form-group"><input class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
+            <div class="form-group"><input required class="form-control" type="email" name="email" id="email" placeholder="Email"></div>
+            <div class="form-group"><input required class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
 			<div class="form-group"><button class="btn btn-primary btn-block" type="submit" onclick="login()">Log In</button></div><a class="forgot" href="#">Forgot your email or password?</a>
 			<legend id="output"></legend>
 		</form>

@@ -1,4 +1,5 @@
 import { userInfo } from "os";
+import { isUndefined } from "util";
 require('dotenv').config();
 let bcrypt = require('bcrypt');
 export class Database {
@@ -285,17 +286,13 @@ export class Database {
         console.log(page);
         let p = parseInt(page.toString()) + 0;
         try {
-            if (p === NaN){
-                let result = await collection.find().limit(1).toArray();
-                console.log("result = ");
-                console.dir(result[0])
-                return result[0];
-            } else {
-                let result = await collection.find().skip(p).limit(1).toArray();
-                console.log("result = ");
-                console.dir(result[0])
-                return result[0];
+            let result = await collection.find().skip(p).limit(1).toArray();
+            console.log("result = ");
+            console.dir(result[0])
+            if (result == undefined){
+                return 
             }
+            return result[0];
 
         } catch (error) {
             console.log(error);

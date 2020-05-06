@@ -23,15 +23,19 @@ async function postData(url, data) {
 
 function login() {
     (async () => {
-    let username = document.getElementById("username").value;
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
 
-	const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
+	const data = { 'email' : email, 'username' : "", 'password' : password }; // -- (1)
 	const resp = await postData(loginURL, data); 
-	const j = await resp.json();
+	let j;
+	try {
+		j = await resp.json();
+	} catch (error) {
+		document.getElementById("output").innerHTML = "password or email incorrect";
+	}
 	if (j['result'] !== 'success') {
-	    document.getElementById("output").innerHTML = j['result'];
+	    document.getElementById("output").innerHTML = "password or email incorrect";
 	} else {
 		document.getElementById("output").innerHTML = "success! you will be login in a second";
 		setTimeout(function(){window.location.href=homeURL}, 1500) 

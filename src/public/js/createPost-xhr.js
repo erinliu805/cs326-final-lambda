@@ -26,6 +26,8 @@ function create_post() {
 	const data = { 'title' : title, 'content' : content}; // -- (1)
 	const resp = await postData(createURL, data); 
 	const j = await resp.json();
+	console.log("The data is ")
+	console.dir(data)
 	if (j['result'] !== 'success') {
 	    document.getElementById("output").innerHTML = j['result'];
 	} else {
