@@ -189,6 +189,7 @@ export class Database {
         //TO DO
         //identify user by a randomly-generalized id
         let new_user = {
+            '_id': Date.now().toString(),
             'email' : userInfo['email'],
             'username' : userInfo['username'],
             'hashedpassword' : bcrypt.hashSync(userInfo['password'], 10).toString(),
