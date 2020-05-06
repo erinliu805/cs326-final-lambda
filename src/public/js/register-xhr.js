@@ -22,7 +22,7 @@ async function postData(url, data) {
 
 
 function checker() {
-	async () => {
+	(async () => {
 		let username = document.getElementById("username").value;
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
@@ -46,7 +46,7 @@ function checker() {
 			flag = false;
 		}
 		return flag
-	}
+	})();
 };
 
 
