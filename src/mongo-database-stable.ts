@@ -286,7 +286,7 @@ export class Database {
         console.log(page);
         let p = parseInt(page.toString()) + 0;
         try {
-            let result = await collection.find().skip(p).limit(1).toArray();
+            let result = await collection.find().sort({_id:-1}).skip(p).limit(1).toArray();
             console.log("result = ");
             console.dir(result[0])
             if (result == undefined){

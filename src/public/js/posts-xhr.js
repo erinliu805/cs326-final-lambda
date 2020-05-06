@@ -36,7 +36,7 @@ function readPost() {
             let html = generateHTML(username, title, formated_content, time);
             console.log(html);
             let postSection = document.getElementById("posts");
-            postSection.innerHTML = html + postSection.innerHTML;
+            postSection.innerHTML = postSection.innerHTML + html;
             console.log("Text changed");
             page = page + 1
         } else {

@@ -36,12 +36,12 @@ function readPost() {
             let html = generateHTML(username, title, formated_content, time);
             console.log(html);
             let postSection = document.getElementById("posts");
-            postSection.innerHTML = html + postSection.innerHTML;
+            postSection.innerHTML = postSection.innerHTML+html;
             console.log("Text changed");
             page = page + 1
         } else {
-            let postSection = document.getElementById("output");
-            postSection.innerHTML = "No more posts to read";
+            let readMore = document.getElementById("readMore");
+            readMore.innerHTML = "No more post to read!";
         }
     })()
 };
