@@ -389,15 +389,16 @@ var MyServer = /** @class */ (function () {
     };
     MyServer.prototype.profileHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var update_user, autheticate_user, error_2, message;
+            var update_user, autheticate_user, result, error_2, message;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         response.header('Content-type', 'application/json');
                         update_user = {
+                            '_id': request.user._id,
                             'username': request.body.username,
                             'email': request.body.email,
-                            'password': request.body.password
+                            'password': request.body.password //new password
                         };
                         autheticate_user = {
                             'email': request.body.email,
@@ -406,29 +407,23 @@ var MyServer = /** @class */ (function () {
                         console.log(update_user);
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 6, , 7]);
-                        return [4 /*yield*/, this.theDatabase.autheticate_user(autheticate_user)];
-                    case 2:
-                        if (!((_a.sent()) === true)) return [3 /*break*/, 4];
+                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, this.theDatabase.update_user(update_user)];
-                    case 3:
-                        _a.sent();
+                    case 2:
+                        result = _a.sent();
+                        console.log(result);
                         response.write(this.successMsg);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        console.log('User info not matched');
-                        response.write(JSON.stringify({ 'result': 'User info not matched' }));
-                        _a.label = 5;
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
+                        response.end();
+                        return [3 /*break*/, 4];
+                    case 3:
                         error_2 = _a.sent();
                         console.log(error_2);
                         message = "the user can not modify.";
                         console.log(message);
                         response.write(this.serverfail);
-                        return [3 /*break*/, 7];
-                    case 7:
                         response.end();
+                        return [3 /*break*/, 4];
+                    case 4:
                         next();
                         return [2 /*return*/];
                 }

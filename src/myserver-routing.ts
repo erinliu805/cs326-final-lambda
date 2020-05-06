@@ -272,9 +272,10 @@ export class MyServer {
     private async profileHandler(request, response, next){
         response.header('Content-type', 'application/json')
         let update_user = {
+            '_id': request.user._id,
             'username': request.body.username,
             'email': request.body.email,
-            'password': request.body.password
+            'password': request.body.password //new password
         };
         let autheticate_user = {
             'email': request.body.email,
@@ -282,21 +283,17 @@ export class MyServer {
         };
         console.log(update_user);
         try {
-            if (await this.theDatabase.autheticate_user(autheticate_user) === true ) {
-                await this.theDatabase.update_user(update_user);
+                let result = await this.theDatabase.update_user(update_user);
+                console.log(result);
                 response.write(this.successMsg);
-            }
-            else {
-                console.log('User info not matched')
-                response.write(JSON.stringify({'result': 'User info not matched'}))
-            }
+                response.end();
         } catch (error) {
             console.log(error)
             let message = "the user can not modify.";
             console.log(message);
             response.write(this.serverfail);
+            response.end();
         }
-        response.end();
         next();
     }
         
