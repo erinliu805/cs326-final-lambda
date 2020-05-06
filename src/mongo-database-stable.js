@@ -295,7 +295,7 @@ var Database = /** @class */ (function () {
                         _a.label = 3;
                     case 3:
                         _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.findOneAndUpdate({ 'email': new_user['email'] }, new_user)];
+                        return [4 /*yield*/, collection.findOneAndUpdate({ '_id': new_user['_id'] }, new_user)];
                     case 4:
                         result = _a.sent();
                         console.log("result = " + result);
@@ -326,7 +326,7 @@ var Database = /** @class */ (function () {
                         _a.label = 3;
                     case 3:
                         _a.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, collection.remove({ 'email': userInfo['email'] })];
+                        return [4 /*yield*/, collection.remove({ '_id': userInfo['_id'] })];
                     case 4:
                         result = _a.sent();
                         console.log("result = " + result);
