@@ -33,18 +33,18 @@ function checker() {
 	let flag = true
 	if (password == confirmPassword) {
 		if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g)&& password.length>=8){
-			document.getElementById("password-prompt").setAttribute('hidden');
+			document.getElementById("password-prompt").setAttribute('hidden', 'true');
 			return true
 		}
 		else {
 			let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
-			document.getElementById("password-prompt").setAttribute("hidden", "true");
+			document.getElementById("password-prompt").setAttribute("hidden", "false");
 			document.getElementById("password-prompt").innerHTML = message;
 			flag = false
 		}
 	} else {
 		let message = "Two password not the same";
-		document.getElementById("password-prompt").removeAttribute('hidden');
+		document.getElementById("password-prompt").setAttribute('hidden', "false");
 		document.getElementById("password-prompt").innerHTML = message;
 		flag = false;
 	}
