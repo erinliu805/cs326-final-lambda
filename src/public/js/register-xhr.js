@@ -63,6 +63,7 @@ function register(){
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
+		console.log('running register\n' + username + " " + email)
 		if(checker()===true){
 			const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
 			const resp = await postData(url, data); 
