@@ -137,6 +137,7 @@ export class Database {
         console.log('Running add user, the input is: ');
         let new_user = {
             '_id': Date.now().toString(),
+            'username': userInfo['username'],
             'email' : userInfo['email'],
             'hashedpassword' : userInfo['password']
         }
@@ -170,7 +171,7 @@ export class Database {
         new_user['hashedpassword'] = hashedpassword;
         try {
             let result = await collection.findOneAndUpdate(
-                {'email': new_user['email']},
+                {'_id': new_user['_id']},
                 new_user
             );
             console.log("result = " + result);    
@@ -193,7 +194,7 @@ export class Database {
 
         try {
             let result = await collection.remove(
-                {'email': userInfo['email']}
+                {'_id': userInfo['_id']}
             );
             console.log("result = " + result);    
             return true;

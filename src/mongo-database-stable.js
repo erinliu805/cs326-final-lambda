@@ -248,6 +248,7 @@ var Database = /** @class */ (function () {
                         console.log('Running add user, the input is: ');
                         new_user = {
                             '_id': Date.now().toString(),
+                            'username': userInfo['username'],
                             'email': userInfo['email'],
                             'hashedpassword': userInfo['password']
                         };

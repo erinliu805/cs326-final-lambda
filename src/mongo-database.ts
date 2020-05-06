@@ -192,7 +192,7 @@ export class Database {
             'email' : userInfo['email'],
             'username' : userInfo['username'],
             'hashedpassword' : bcrypt.hashSync(userInfo['password'], 10).toString(),
-            'login': 0
+            '_id': Date.now().toString
         }
         if(!(await this.check_username(userInfo['username'])) || !(await this.check_email(userInfo['email']))) {
             console.log("username or email has been used before!\n" + userInfo);
