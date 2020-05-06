@@ -1,5 +1,5 @@
 const url = "https://aqueous-dusk-44841.herokuapp.com/profile"; 
-const homeURL = "http://aqueous-dusk-44841.herokuapp.com"
+const homeURL = "https://aqueous-dusk-44841.herokuapp.com"
 
 // NEW: helper method for posting data
 async function postData(url, data) {

@@ -30,17 +30,20 @@ function checker() {
 		if (password == confirmPassword) {
 			if (password.value.match(/[a-z]/g) && password.value.match(/[A-Z]/g) && password.value.match(/[0-9]/g)&& password.value.length>=8){
 				document.getElementById("password-prompt").addAttribute('hidden');
+				return true;
 			}
 			else{
 				let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
 				document.getElementById("password-prompt").removeAttribute('hidden');
 				document.getElementById("password-prompt").innerHTML = message;
+				return false;
 			}
 		}
 		if (password != confirmPassword) {
 			let message = "Two password not the same";
 			document.getElementById("password-prompt").removeAttribute('hidden');
 			document.getElementById("password-prompt").innerHTML = message;
+			return false;
 		}
 		
 	}
@@ -54,17 +57,21 @@ function register(){
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
-		const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
-		const resp = await postData(url, data); 
-		const j = await resp.json();
-		console.log('Result is: ')
-		console.log(j)
-		if (j['result'] !== 'success') {
-			document.getElementById("output").innerHTML = j['result'];
-		} else {
-			document.getElementById("output").innerHTML = username + ' login in';
-			setTimeout(function(){window.location.href=loginURL}, 3000) 
+		if(checker()===true){
+			const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
+			const resp = await postData(url, data); 
+			const j = await resp.json();
+			console.log('Result is: ')
+			console.log(j)
+			if (j['result'] !== 'success') {
+				document.getElementById("output").innerHTML = j['result'];
+			} else {
+				document.getElementById("output").innerHTML = username + ' login in';
+				setTimeout(function(){window.location.href=loginURL}, 3000) 
+			}
 		}
-
+		else{
+			document.getElementById("output").innerHTML =  'please try again';
+		}
 	})()
 }
