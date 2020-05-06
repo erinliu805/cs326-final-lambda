@@ -48,12 +48,7 @@ var Database = /** @class */ (function () {
         this.postDatabase = "post-db";
         this.topicDatabase = "topic-db";
         this.dbName = dbName;
-        try {
-            this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
-        }
-        catch (err) {
-            console.log(err);
-        }
+        this.client = new this.MongoClient(this.uri, { useNewUrlParser: true });
         var mongoclient = this.client;
         (function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -76,14 +71,15 @@ var Database = /** @class */ (function () {
     // TODO: implement check, add, delete, update user information
     Database.prototype.check_username = function (username) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var userDatabase, mongoclient;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        userDatabase = this.userDatabase;
                         mongoclient = this.client;
                         console.log("checking if username " + username + " has been used");
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).find({ "username": username }).count();
+                                var result = db.collection(userDatabase).find({ "username": username }).count();
                                 mongoclient.close();
                                 return result === 0;
                             })["catch"](function (err) { console.log(err); })];
@@ -96,14 +92,15 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.check_email = function (email) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var userDatabase, mongoclient;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        userDatabase = this.userDatabase;
                         mongoclient = this.client;
                         console.log("checking if email " + email + " has been used");
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).find({ "email": email }).count();
+                                var result = db.collection(userDatabase).find({ "email": email }).count();
                                 mongoclient.close();
                                 return result === 0;
                             })["catch"](function (err) { console.log(err); })];
@@ -116,14 +113,15 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.autheticate_user = function (loginInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var userDatabase, mongoclient;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        userDatabase = this.userDatabase;
                         mongoclient = this.client;
                         console.log("authenticating user " + loginInfo);
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).findOne({ "email": loginInfo['email'] });
+                                var result = db.collection(userDatabase).findOne({ "email": loginInfo['email'] });
                                 mongoclient.close();
                                 return bcrypt.compare(loginInfo['password'], result['hashedpassword']);
                             })["catch"](function (err) { console.log(err); })];
@@ -136,10 +134,11 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.add_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient, new_user, _a;
+            var userDatabase, mongoclient, new_user, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        userDatabase = this.userDatabase;
                         mongoclient = this.client;
                         console.log('Running add user, the input is: ' + userInfo);
                         new_user = {
@@ -162,7 +161,7 @@ var Database = /** @class */ (function () {
                             return [2 /*return*/, false];
                         }
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).insertOne(new_user);
+                                var result = db.collection(userDatabase).insertOne(new_user);
                                 mongoclient.close();
                                 return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
                             })["catch"](function (err) { console.log(err); })];
@@ -175,12 +174,13 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.login_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient, new_user, _a;
+            var mongoclient, userDatabase, new_user, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         console.log('Log in user, the input is: ' + userInfo);
                         mongoclient = this.client;
+                        userDatabase = this.userDatabase;
                         if (userInfo['login'] === '1') {
                             console.log("user has already log in!\n" + userInfo);
                             return [2 /*return*/, true];
@@ -204,7 +204,7 @@ var Database = /** @class */ (function () {
                             return [2 /*return*/, false];
                         }
                         return [4 /*yield*/, this.client.connect(this.uri, function (err, db) {
-                                var result = db.collection(this.userDatabase).findOneAndReplace({ 'login': '1' }, new_user);
+                                var result = db.collection(userDatabase).findOneAndReplace({ 'login': '1' }, new_user);
                                 mongoclient.close();
                                 return result !== null;
                             })["catch"](function (err) { console.log(err); })];
@@ -217,7 +217,7 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.update_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient, new_user, _a;
+            var mongoclient, userDatabase, new_user, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -248,6 +248,7 @@ var Database = /** @class */ (function () {
                         // }
                         console.log('Running update user, the input is: ' + userInfo);
                         mongoclient = this.client;
+                        userDatabase = this.userDatabase;
                         if (userInfo['login'] !== '1') {
                             console.log("user not log in!\n" + userInfo);
                             return [2 /*return*/, false];
@@ -271,7 +272,7 @@ var Database = /** @class */ (function () {
                             return [2 /*return*/, false];
                         }
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).findOneAndReplace({ 'email': userInfo['email'] }, new_user);
+                                var result = db.collection(userDatabase).findOneAndReplace({ 'email': userInfo['email'] }, new_user);
                                 mongoclient.close();
                                 return result !== null;
                             })["catch"](function (err) { console.log(err); })];
@@ -284,14 +285,15 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.delete_user = function (userInfo) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var userDatabase, mongoclient;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        userDatabase = this.userDatabase;
                         mongoclient = this.client;
                         console.log('Running delete user, the input is: ' + userInfo);
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.userDatabase).remove({ 'email': userInfo['email'] });
+                                var result = db.collection(userDatabase).remove({ 'email': userInfo['email'] });
                                 mongoclient.close();
                                 return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
                             })["catch"](function (err) { console.log(err); })];
@@ -307,11 +309,12 @@ var Database = /** @class */ (function () {
     // TODO: implement create, update, delete a post
     Database.prototype.create_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient, data;
+            var mongoclient, postDatabase, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         mongoclient = this.client;
+                        postDatabase = this.postDatabase;
                         data = {
                             '_id': Date.now().toString(),
                             'title': post['title'],
@@ -322,7 +325,7 @@ var Database = /** @class */ (function () {
                         };
                         console.log('Running create post, the input is: ' + post);
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.postDatabase).insertOne(data);
+                                var result = db.collection(postDatabase).insertOne(data);
                                 mongoclient.close();
                                 return result['acknowledged']; //default write concern is 1, which is ok since we only have 1 server
                             })["catch"](function (err) { console.log(err); })];
@@ -335,14 +338,15 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.update_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var postDatabase, mongoclient;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        postDatabase = this.postDatabase;
                         mongoclient = this.client;
                         console.log('Running create post, the input is: ' + post);
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.postDatabase).findOneAndUpdate({ '_id': post['_id'] }, {
+                                var result = db.collection(postDatabase).findOneAndUpdate({ '_id': post['_id'] }, {
                                     $set: {
                                         'title': post['title'],
                                         'username': post['username'],
@@ -362,14 +366,15 @@ var Database = /** @class */ (function () {
     };
     Database.prototype.delete_post = function (post) {
         return __awaiter(this, void 0, void 0, function () {
-            var mongoclient;
+            var mongoclient, postDatabase;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         mongoclient = this.client;
+                        postDatabase = this.postDatabase;
                         console.log('Running delete post, the input is: ' + post);
                         return [4 /*yield*/, this.client.connect(function (err, db) {
-                                var result = db.collection(this.postDatabase).remove(post);
+                                var result = db.collection(postDatabase).remove(post);
                                 mongoclient.close();
                                 return result['nRemoved'] === 1;
                             })["catch"](function (err) { console.log(err); })];
@@ -407,7 +412,7 @@ var Database = /** @class */ (function () {
                     case 5:
                         error_1 = _a.sent();
                         console.log(error_1);
-                        console.log('falied');
+                        console.log('failed');
                         return [2 /*return*/, null];
                     case 6: return [2 /*return*/];
                 }
