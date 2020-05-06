@@ -156,6 +156,23 @@ export class MyServer {
             }
         })
 
+        this.router.get('/get_user_info', async (request, response, next) => {
+            response.header('Content-type', 'application/json')
+            if (request.isAuthenticated()){
+                let userInfo = {
+                'username': request.user.username, 
+                'email': request.user.email, 
+                'result' : 'success'}
+                response.write(JSON.stringify(userInfo))
+                response.end()
+            }
+            else {
+                response.write(this.failMsg)
+                response.end()
+            }
+            next();
+        })
+        
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));

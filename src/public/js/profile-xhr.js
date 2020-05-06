@@ -1,5 +1,10 @@
 const url = "https://aqueous-dusk-44841.herokuapp.com/profile"; 
 const homeURL = "https://aqueous-dusk-44841.herokuapp.com"
+const getInfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info"
+
+// const url = "localhost:8080/profile"
+// const homeURL="localhost:8080"
+// const getInfoURL = "localhost:8080/get_user_info"
 
 // NEW: helper method for posting data
 async function postData(url, data) {
@@ -51,16 +56,36 @@ function profile(){
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
-		const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
-		const resp = await postData(url, data); 
-		const j = await resp.json();
-		console.log('Result is: ')
-		console.log(j)
-		if (j['result'] !== 'success') {
-			document.getElementById("output").innerHTML = j['result'];
-		} else {
-			document.getElementById("output").innerHTML = username + ' update profile';
-			setTimeout(function(){window.location.href=homeURL}, 1500) 
+		if(checker===true){
+			const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
+			const resp = await postData(url, data); 
+			const j = await resp.json();
+			console.log('Result is: ')
+			console.log(j)
+			if (j['result'] !== 'success') {
+				document.getElementById("output").innerHTML = j['result'];
+			} else {
+				document.getElementById("output").innerHTML = username + ' update profile';
+				setTimeout(function(){window.location.href=homeURL}, 1500) 
+			}
+		}
+		else{
+			document.getElementById("output").innerHTML = 'please try again';
 		}
     })();
+}
+
+function get_user_info(){
+	(async() =>{
+		let resp = await fetch(getInfoURL)
+		let j = await resp.json()
+		if (j['result'] == 'success'){
+			let email = document.getElementById("email")
+			email.value = j['email']
+			let username = document.getElementById("username")
+			username.value = j['username']
+		} else {
+			console.log("Something goes wrong")
+		}
+	})()
 }
