@@ -28,7 +28,34 @@ export class Database {
     // user information section
     // TODO: implement check, add, delete, update user information
 
-    
+    public async getUserByEmail(email: string): Promise<JSON> {
+        let db = await this.client.db(this.dbName);
+        let collection = await db.collection(this.userDatabase)
+        try {
+            let user = await collection.findOne(
+                {'email': email}
+            )
+            return user
+        } catch(e) {
+            console.log(e)
+            return
+        }
+    }
+
+    public async getUserById(id: any): Promise<JSON> {
+        let db = await this.client.db(this.dbName);
+        let collection = await db.collection(this.userDatabase)
+        try {
+            let user = await collection.findOne(
+                {'_id': id}
+            )
+            return user
+        } catch(e) {
+            console.log(e)
+            return
+        }
+    }
+
     public async check_username(username: string) : Promise<boolean> {
         // check username has been used
         // username not used, return true 
@@ -417,9 +444,7 @@ export class Database {
     }
 
     //I have no idea how we're going to specify which post to read, so I've left this one as is
-
-    public async read_post(page: number) : Promise<JSON> {
-        var mongoclient = this.client;
+    public async read_post(page) : Promise<JSON> {
         // post format:
         /* {username: 'xxx', date: Date, title: 'xxx', content: '......'}*/
         //return true when post is deleted
@@ -427,13 +452,19 @@ export class Database {
         let collection = await db.collection(this.postDatabase);
         console.log('Running read post, the input is: ');
         console.log(page);
+        let p = parseInt(page.toString()) + 0;
         try {
-            let result = await collection.findOne().skip(page);
-            console.log("result = " + result);
-            return result;
+            let result = await collection.find().sort({_id:-1}).skip(p).limit(1).toArray();
+            console.log("result = ");
+            console.dir(result[0])
+            if (result == undefined){
+                return 
+            }
+            return result[0];
+
         } catch (error) {
             console.log(error);
-            console.log('failed');
+            console.log('falied');
             return null
         }
     }

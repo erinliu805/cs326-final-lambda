@@ -22,31 +22,29 @@ async function postData(url, data) {
 
 
 function checker() {
-	(async () => {
-		let username = document.getElementById("username").value;
-		let email = document.getElementById("email").value;
-		let password = document.getElementById("password").value;
-		let confirmPassword = document.getElementById("password-confirm").value;
-		let flag = true
-		if (password == confirmPassword) {
-			if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g)&& password.length>=8){
-				document.getElementById("password-prompt").addAttribute('hidden');
-			}
-			else{
-				let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
-				document.getElementById("password-prompt").removeAttribute('hidden');
-				document.getElementById("password-prompt").innerHTML = message;
-				flag = false
-			}
+	let username = document.getElementById("username").value;
+	let email = document.getElementById("email").value;
+	let password = document.getElementById("password").value;
+	let confirmPassword = document.getElementById("password-confirm").value;
+	let flag = true
+	if (password == confirmPassword) {
+		if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g)&& password.length>=8){
+			document.getElementById("password-prompt").setAttribute("hidden", "true");
+			return true
 		}
-		if (password != confirmPassword) {
-			let message = "Two password not the same";
+		else {
+			let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
 			document.getElementById("password-prompt").removeAttribute('hidden');
 			document.getElementById("password-prompt").innerHTML = message;
-			flag = false;
+			flag = false
 		}
-		return flag
-	})();
+	} else {
+		let message = "Two password not the same";
+		document.getElementById("password-prompt").removeAttribute('hidden');
+		document.getElementById("password-prompt").innerHTML = message;
+		flag = false;
+	}
+	return flag
 };
 
 

@@ -24,30 +24,33 @@ async function postData(url, data) {
 }
 
 
+
 function checker() {
-	async () => {
-		let username = document.getElementById("username").value;
-		let email = document.getElementById("email").value;
-		let password = document.getElementById("password").value;
-		let confirmPassword = document.getElementById("password-confirm").value;
-		if (password == confirmPassword) {
-			if (password.value.match(/[a-z]/g) && password.value.match(/[A-Z]/g) && password.value.match(/[0-9]/g)&& password.value.length>=8){
-				document.getElementById("password-prompt").addAttribute('hidden');
-			}
-			else{
-				let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
-				document.getElementById("password-prompt").removeAttribute('hidden');
-				document.getElementById("password-prompt").innerHTML = message;
-			}
+	let username = document.getElementById("username").value;
+	let email = document.getElementById("email").value;
+	let password = document.getElementById("password").value;
+	let confirmPassword = document.getElementById("password-confirm").value;
+	let flag = true
+	if (password == confirmPassword) {
+		if (password.match(/[a-z]/g) && password.match(/[A-Z]/g) && password.match(/[0-9]/g)&& password.length>=8){
+			document.getElementById("password-prompt").setAttribute('hidden');
+			return true
 		}
-		if (password != confirmPassword) {
-			let message = "Two password not the same";
-			document.getElementById("password-prompt").removeAttribute('hidden');
+		else {
+			let message = "Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters";
+			document.getElementById("password-prompt").setAttribute("hidden", "true");
 			document.getElementById("password-prompt").innerHTML = message;
+			flag = false
 		}
-		
+	} else {
+		let message = "Two password not the same";
+		document.getElementById("password-prompt").removeAttribute('hidden');
+		document.getElementById("password-prompt").innerHTML = message;
+		flag = false;
 	}
+	return flag
 };
+
 
 function profile(){
 	(async () => {
