@@ -4,8 +4,8 @@ const readURL = "https://aqueous-dusk-44841.herokuapp.com/read";
 let page = 0
 
 function generateHTML(author, title, content, time, id) {
-    var result = "";
-    (async () => {
+    let result = "";
+    return (async () => {
         let response = await fetch(InfoURL);
         let json = await response.json();
         let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost(${id.toString()})"">Edit</a></li></ul`
@@ -19,6 +19,7 @@ function generateHTML(author, title, content, time, id) {
                     <p class="post-content">${content}</p>${editButton}</div></div>`
         console.log(html);
         result = html;
+        return html;
     })();
     return result;
 }
