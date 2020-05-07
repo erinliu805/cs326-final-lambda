@@ -271,7 +271,7 @@ export class Database {
             return true;
         } catch (error) {
             console.log(error);
-            console.log('falied');
+            console.log('failed');
             return false
         }
     }

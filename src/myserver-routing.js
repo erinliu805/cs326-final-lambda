@@ -175,6 +175,23 @@ var MyServer = /** @class */ (function () {
                 return [2 /*return*/];
             });
         }); });
+        this.router.get('/delete_post', this.isLoggedIn, function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
+            var file_path, data;
+            return __generator(this, function (_a) {
+                if (request.isAuthenticated()) {
+                    file_path = path.join(__dirname, 'public/edit_post.html');
+                    data = fs.readFileSync(file_path);
+                    response.header('Content-Type', 'text/html');
+                    response.write(data);
+                    response.end();
+                }
+                else {
+                    response.redirect('/login');
+                }
+                next();
+                return [2 /*return*/];
+            });
+        }); });
         //TO Do 
         // before go to profile, check if the user log in
         this.router.get('/profile', this.isLoggedIn, function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
@@ -284,6 +301,7 @@ var MyServer = /** @class */ (function () {
         }); });
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/delete_post', this.isLoggedIn, this.deletePostHandler.bind(this));
         this.router.post('/edit_post_submit', this.isLoggedIn, this.editPostSubmitHandler.bind(this));
         this.router.post('/delete_user', this.isLoggedIn, this.deleteUserHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
@@ -535,6 +553,35 @@ var MyServer = /** @class */ (function () {
                         }
                         _a.label = 3;
                     case 3:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    MyServer.prototype.deletePostHandler = function (request, response, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('Create post');
+                        console.dir(request.user);
+                        data = {
+                            '_id': request.body.id
+                        };
+                        console.log(data);
+                        return [4 /*yield*/, this.theDatabase.create_post(data)];
+                    case 1:
+                        // add this post into the database
+                        if (_a.sent()) {
+                            response.write(this.successMsg);
+                            response.end();
+                        }
+                        else {
+                            response.write(this.failMsg);
+                            response.end();
+                        }
                         next();
                         return [2 /*return*/];
                 }

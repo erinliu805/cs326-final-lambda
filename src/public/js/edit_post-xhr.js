@@ -39,3 +39,20 @@ function edit_post() {
 	}
     })();
 }
+
+function delete_post() {
+	(async () =>  {
+		let data = {
+			id: localStorage.getItem('editID')
+		}
+		localStorage.setItem('editID', -1);
+		let resp = await postData('https://aqueous-dusk-44841.herokuapp.com/delete_post', data);
+		if (j['result'] !== 'success') {
+	    	document.getElementById("output").innerHTML = j['result'];
+		} else {
+			document.getElementById("output").innerHTML = "success! noone will remember your mistakes!";
+			setTimeout(function(){window.location.href=homeURL}, 1500) 
+		}
+
+	})();
+}

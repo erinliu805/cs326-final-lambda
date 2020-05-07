@@ -435,7 +435,7 @@ var Database = /** @class */ (function () {
                     case 5:
                         error_9 = _a.sent();
                         console.log(error_9);
-                        console.log('falied');
+                        console.log('failed');
                         return [2 /*return*/, false];
                     case 6: return [2 /*return*/];
                 }
