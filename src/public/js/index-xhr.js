@@ -3,7 +3,7 @@ const readURL = "https://aqueous-dusk-44841.herokuapp.com/read";
 const InfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info";
 let page = 0
 
-function generateHTML(author, title, content, time) {
+function generateHTML(author, title, content, time, id) {
     let resp = await fetch(InfoURL);
     let j = await resp.json();
     let editButton = (j['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" href="/edit_post">Edit</a></li></ul`
@@ -14,11 +14,18 @@ function generateHTML(author, title, content, time) {
                     <h2 class="mt-0 post-title">${title.toString()}</h2>
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
+                    <small class="text-muted" id = "_id">${id}</small>
                     <p class="post-content">${content}</p>` + editButton + `
                 </div>
             </div>
             `
     return html;
+}
+
+function editPost() {
+    (async () => {
+
+    })();
 }
 
 function readPost() {
@@ -38,7 +45,7 @@ function readPost() {
             let formated_content = content.replace(/\n/g, '<br>')
             let username = j['username']
             let title = j['title']
-            let html = generateHTML(username, title, formated_content, time);
+            let html = generateHTML(username, title, formated_content, time, j['_id']);
             console.log(html);
             let postSection = document.getElementById("posts");
             postSection.innerHTML = postSection.innerHTML+html;
