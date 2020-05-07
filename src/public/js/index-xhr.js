@@ -5,9 +5,9 @@ let page = 0
 
 function generateHTML(author, title, content, time, id) {
     let result = "";
-    return (() => {
-        let response = fetch(InfoURL);
-        let json = JSON.parse(response);
+    (async () => {
+        let response = await fetch(InfoURL);
+        let json = await response.json();
         let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost(${id.toString()})"">Edit</a></li></ul`
                 : ``;
         let html = `<div class="media content-section">
@@ -19,7 +19,9 @@ function generateHTML(author, title, content, time, id) {
                     <p class="post-content">${content}</p>${editButton}</div></div>`
         console.log(html);
         result = html;
-        return html;
+        let postSection = document.getElementById("posts");
+        postSection.innerHTML = postSection.innerHTML+html;
+        //return html;
     })();
 }
 
@@ -59,7 +61,7 @@ function readPost() {
             let html = generateHTML(username, title, formated_content, time, j['_id']);
             console.log(html);
             let postSection = document.getElementById("posts");
-            postSection.innerHTML = postSection.innerHTML+html;
+            //postSection.innerHTML = postSection.innerHTML+html;
             console.log("Text changed");
             page = page + 1
         } else {
