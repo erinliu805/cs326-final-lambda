@@ -48,14 +48,6 @@ function editPost(idthis) {
         let resp = await postData(url, data);
         document.html=resp;
         //const j = await resp.json();
-        console.log("The data is ")
-        console.dir(data)
-        if (j['result'] !== 'success') {
-            //document.getElementById("output").innerHTML = j['result'];
-        } else {
-            //document.getElementById("output").innerHTML = "success! you can see your post in home page";
-            //setTimeout(function(){window.location.href=homeURL}, 1500) 
-        }
     })();
 }
 
