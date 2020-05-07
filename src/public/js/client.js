@@ -1,4 +1,4 @@
-
+var editID = 0;
 const InfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info"
 
 function get_right_bar(){

@@ -146,7 +146,7 @@ var MyServer = /** @class */ (function () {
             return __generator(this, function (_a) {
                 if (request.isAuthenticated()) {
                     file_path = path.join(__dirname, 'public/edit_post.html');
-                    data = fs.readFileSync(file_path).toString.replace("REPLACETHISWITHID", request.body.id);
+                    data = fs.readFileSync(file_path);
                     response.header('Content-Type', 'text/html');
                     response.write(data);
                     response.end();

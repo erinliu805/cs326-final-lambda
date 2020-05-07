@@ -44,10 +44,12 @@ function generateHTML(author, title, content, time, id) {
 function editPost(idthis) {
     (async () => {
         var url = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
-        let data = {id: idthis}
-        let resp = await postData(url, data);
-        console.log("initializing edit")
-        document.html=resp;
+        //let data = {id: idthis}
+        //let resp = await postData(url, data);
+        editID = idthis;
+        window.location.href=url;
+        //console.log("initializing edit")
+        //document.html=resp;
         //const j = await resp.json();
     })();
 }
