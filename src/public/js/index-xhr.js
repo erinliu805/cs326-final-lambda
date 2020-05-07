@@ -8,14 +8,14 @@ function generateHTML(author, title, content, time, id) {
         let response = await fetch(InfoURL);
         let json = await response.json();
         let editButton = (json['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost()"">Edit</a></li></ul`
-                : null;
+                : "";
         let html = `<div class="media content-section">
                     <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
                     <div class="media-body">
                     <h2 class="mt-0 post-title">${title.toString()}</h2>
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
-                    <small class="text-muted" id = "_id">${id}</small>
+                    <small class="text-muted" id = "_id">${id.toString()}</small>
                     <p class="post-content">${content}</p>` + editButton + `
                     </div>
                 </div>`
