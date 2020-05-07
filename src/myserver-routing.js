@@ -250,6 +250,7 @@ var MyServer = /** @class */ (function () {
         }); });
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/delete_user', this.isLoggedIn, this.deleteUserHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.router.post('/logout', function (request, response, next) { return __awaiter(_this, void 0, void 0, function () {
@@ -333,6 +334,7 @@ var MyServer = /** @class */ (function () {
             });
         });
     };
+    //create user handler
     MyServer.prototype.registerHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
             var new_user, _a, error_1, message;
@@ -387,9 +389,10 @@ var MyServer = /** @class */ (function () {
             });
         });
     };
+    //update user handler
     MyServer.prototype.profileHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var update_user, autheticate_user, result, error_2, message;
+            var update_user, result, error_2, message;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -399,10 +402,6 @@ var MyServer = /** @class */ (function () {
                             'username': request.body.username,
                             'email': request.body.email,
                             'password': request.body.password //new password
-                        };
-                        autheticate_user = {
-                            'email': request.body.email,
-                            'password': request.body.password
                         };
                         console.log(update_user);
                         _a.label = 1;
@@ -419,6 +418,45 @@ var MyServer = /** @class */ (function () {
                         error_2 = _a.sent();
                         console.log(error_2);
                         message = "the user can not modify.";
+                        console.log(message);
+                        response.write(this.serverfail);
+                        response.end();
+                        return [3 /*break*/, 4];
+                    case 4:
+                        next();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    //delete user handler
+    MyServer.prototype.deleteUserHandler = function (request, response, next) {
+        return __awaiter(this, void 0, void 0, function () {
+            var delete_user, result, error_3, message;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        response.header('Content-type', 'application/json');
+                        delete_user = {
+                            '_id': request.user._id
+                        };
+                        console.log(delete_user);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.theDatabase.delete_user(delete_user)];
+                    case 2:
+                        result = _a.sent();
+                        console.log(result);
+                        request.logout();
+                        response.redirect('/');
+                        response.write(this.successMsg);
+                        response.end();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        error_3 = _a.sent();
+                        console.log(error_3);
+                        message = "the user can not be deleted.";
                         console.log(message);
                         response.write(this.serverfail);
                         response.end();
@@ -470,7 +508,7 @@ var MyServer = /** @class */ (function () {
     };
     MyServer.prototype.loginHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var data, error_3;
+            var data, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -495,8 +533,8 @@ var MyServer = /** @class */ (function () {
                         }
                         return [3 /*break*/, 4];
                     case 3:
-                        error_3 = _a.sent();
-                        console.log(error_3);
+                        error_4 = _a.sent();
+                        console.log(error_4);
                         response.write(this.serverfail);
                         response.end();
                         return [3 /*break*/, 4];
