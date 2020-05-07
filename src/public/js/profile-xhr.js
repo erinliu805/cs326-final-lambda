@@ -66,7 +66,7 @@ function profile(){
 		let email = document.getElementById("email").value;
 		let password = document.getElementById("password").value;
 		let confirmPassword = document.getElementById("password-confirm").value;
-		if(checker===true){
+		if(checker()===true){
 			const data = { 'email' : email, 'username' : username, 'password' : password }; // -- (1)
 			const resp = await postData(url, data); 
 			const j = await resp.json();

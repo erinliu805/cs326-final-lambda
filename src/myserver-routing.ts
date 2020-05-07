@@ -175,6 +175,7 @@ export class MyServer {
         
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/delete_user', this.isLoggedIn, this.deleteUserHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
         this.router.post('/logout', async (request, response, next)=>{
@@ -235,6 +236,7 @@ export class MyServer {
         }
     }
 
+    //create user handler
     private async registerHandler(request, response, next) {
         response.header('Content-type', 'application/json')
         let new_user = {
@@ -269,17 +271,14 @@ export class MyServer {
         next();
     }
 
+    //update user handler
     private async profileHandler(request, response, next){
         response.header('Content-type', 'application/json')
         let update_user = {
             '_id': request.user._id,
-            'username': request.body.username,
-            'email': request.body.email,
+            'username': request.body.username,//new username
+            'email': request.body.email,//new email
             'password': request.body.password //new password
-        };
-        let autheticate_user = {
-            'email': request.body.email,
-            'password': request.body.password
         };
         console.log(update_user);
         try {
@@ -296,7 +295,30 @@ export class MyServer {
         }
         next();
     }
-        
+       
+    //delete user handler
+    private async deleteUserHandler(request, response, next){
+        response.header('Content-type', 'application/json')
+        let delete_user = {
+            '_id': request.user._id
+        };
+        console.log(delete_user);
+        try {
+                let result = await this.theDatabase.delete_user(delete_user);
+                console.log(result);
+                request.logout();
+                response.redirect('/');
+                response.write(this.successMsg);
+                response.end();
+        } catch (error) {
+            console.log(error)
+            let message = "the user can not be deleted.";
+            console.log(message);
+            response.write(this.serverfail);
+            response.end();
+        }
+        next();
+    }
 
     private async createPostHandler(request, response, next){
         console.log('Create post')
