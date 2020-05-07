@@ -7,36 +7,32 @@ function generateHTML(author, title, content, time, id) {
     (async () => {
         let response = await fetch(InfoURL);
         let json = await response.json();
-        let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost()"">Edit</a></li></ul`
+        let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost(${id.toString()})"">Edit</a></li></ul`
                 : "";
         let html = `<div class="media content-section">
                     <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
-                    <div class="media-body">
+                    <div class="media-body" id="${id.toString()}>"
                     <h2 class="mt-0 post-title">${title.toString()}</h2>
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
-                    <small class="text-muted" id = "_id">${id.toString()}</small>
-                    <p class="post-content">${content}</p>` + editButton + `
-                    </div>
-                </div>`
+                    <p class="post-content">${content}</p>${editButton}</div></div>`
         return html;
        })();
 }
 
-function editPost() {
+function editPost(id) {
     (async () => {
         var form = document.createElement('form');
         document.body.appendChild(form);
         form.method = 'post';
         form.action = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
-        for (var name in data) {
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = name;
-            input.value = data[name];
-            form.appendChild(input);
-        }
-        form.submit();
+        let data = document.getElementById(id);
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = "_id";
+        input.value = id;
+        form.appendChild(input);
+      form.submit();
     })();
 }
 
