@@ -390,6 +390,12 @@ export class MyServer {
             response.write(this.failMsg);
             response.end();
         }
+        let postData = {
+            '_id' : request.body.id,
+            'username' : request.user.username,
+            'title': request.body.title,
+            'content': request.body.content
+        }
         // add this post into the database
         else if(await this.theDatabase.update_post(data)){
             response.write(this.successMsg);

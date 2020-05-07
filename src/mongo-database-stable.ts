@@ -240,10 +240,10 @@ export class Database {
             let result = await collection.findOneAndUpdate(
                 {'_id':post['_id']},
                 {
-                    '_id' : Date.now().toString(),
-                    'title' : post['title'],
-                    'username' : post['username'],
-                    'content' : post['content']
+                    $set: {
+                        'title' : post['title'],
+                        'content' : post['content']
+                    }
                 }
             );
             console.log("result = " + result);    
