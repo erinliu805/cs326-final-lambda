@@ -33,7 +33,7 @@ function generateHTML(author, title, content, time, id) {
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
                     <p class="post-content">${content}</p>${editButton}</div></div>`
-        console.log(html);
+        //console.log(html);
         result = html;
         let postSection = document.getElementById("posts");
         postSection.innerHTML = postSection.innerHTML+html;
@@ -46,6 +46,7 @@ function editPost(idthis) {
         var url = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
         let data = {id: idthis}
         let resp = await postData(url, data);
+        console.log("initializing edit")
         document.html=resp;
         //const j = await resp.json();
     })();
@@ -69,7 +70,7 @@ function readPost() {
             let username = j['username']
             let title = j['title']
             let html = generateHTML(username, title, formated_content, time, j['_id']);
-            console.log(html);
+            //console.log(html);
             let postSection = document.getElementById("posts");
             //postSection.innerHTML = postSection.innerHTML+html;
             console.log("Text changed");

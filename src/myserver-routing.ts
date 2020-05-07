@@ -96,7 +96,7 @@ export class MyServer {
         this.router.get('/edit_post', this.isLoggedIn, async (request, response, next) => {
             if (request.isAuthenticated()){
                 let file_path = path.join(__dirname, 'public/edit_post.html');
-                let data = fs.readFileSync(file_path).toString.replace("REPLACETHISWITHID", request["_id"]);
+                let data = fs.readFileSync(file_path).toString.replace("REPLACETHISWITHID", request.body.id);
                 response.header('Content-Type', 'text/html');
                 response.write(data);
                 response.end();
