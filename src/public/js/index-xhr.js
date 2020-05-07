@@ -16,8 +16,9 @@ function generateHTML(author, title, content, time, id) {
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
                     <p class="post-content">${content}</p>${editButton}</div></div>`
+        console.log(html);
         return html;
-       })();
+      })();
 }
 
 function editPost(id) {
