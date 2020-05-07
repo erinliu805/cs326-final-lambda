@@ -47,6 +47,7 @@ function delete_post() {
 		}
 		localStorage.setItem('editID', -1);
 		let resp = await postData('https://aqueous-dusk-44841.herokuapp.com/delete_post', data);
+		let j = resp.json();
 		if (j['result'] !== 'success') {
 	    	document.getElementById("output").innerHTML = j['result'];
 		} else {
