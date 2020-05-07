@@ -4,27 +4,39 @@ const InfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info";
 let page = 0
 
 function generateHTML(author, title, content, time, id) {
-    let resp = await fetch(InfoURL);
-    let j = await resp.json();
-    let editButton = (j['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" href="/edit_post">Edit</a></li></ul`
-            : null;
-    let html = `<div class="media content-section">
-                <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
-                <div class="media-body">
+    (async () => {
+        let response = await fetch(InfoURL);
+        let json = await response.json();
+        let editButton = (json['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost()"">Edit</a></li></ul`
+                : null;
+        let html = `<div class="media content-section">
+                    <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
+                    <div class="media-body">
                     <h2 class="mt-0 post-title">${title.toString()}</h2>
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
                     <small class="text-muted" id = "_id">${id}</small>
                     <p class="post-content">${content}</p>` + editButton + `
-                </div>
-            </div>
-            `
-    return html;
+                    </div>
+                </div>`
+        return html;
+       })();
 }
 
 function editPost() {
     (async () => {
-
+        var form = document.createElement('form');
+        document.body.appendChild(form);
+        form.method = 'post';
+        form.action = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
+        for (var name in data) {
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = data[name];
+            form.appendChild(input);
+        }
+        form.submit();
     })();
 }
 
