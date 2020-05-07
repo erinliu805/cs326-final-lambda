@@ -107,6 +107,20 @@ export class MyServer {
             next();
         });
 
+        this.router.get('/edit_post_submit', this.isLoggedIn, async (request, response, next) => {
+            if (request.isAuthenticated()){
+                let file_path = path.join(__dirname, 'public/edit_post.html');
+                let data = fs.readFileSync(file_path);//.toString.replace("REPLACETHISWITHID", request.body.id);
+                response.header('Content-Type', 'text/html');
+                response.write(data);
+                response.end();
+            }
+            else {
+                response.redirect('/login')
+            }
+            next();
+        });
+
         //TO Do 
         // before go to profile, check if the user log in
         this.router.get('/profile', this.isLoggedIn, async (request, response, next) => {
@@ -362,7 +376,7 @@ export class MyServer {
     }
 
     private async editPostSubmitHandler(request, response, next){
-        console.log('Create post')
+        console.log('Edit post')
         console.dir(request.user)
         let data = {
             '_id': request.body.id,

@@ -25,7 +25,8 @@ function edit_post() {
     let title = document.getElementById("title").value;
     let content = document.getElementById("content").value;
 
-	const data = { 'title' : title, 'content' : content}; // -- (1)
+	const data = { 'title' : title, 'content' : content, id : localStorage.getItem('editID')}; // -- (1)
+	localStorage.setItem('editID', -1);
 	const resp = await postData(editURL, data); 
 	const j = await resp.json();
 	console.log("The data is ")

@@ -46,7 +46,7 @@ function editPost(idthis) {
         var url = 'https://aqueous-dusk-44841.herokuapp.com/edit_post';
         //let data = {id: idthis}
         //let resp = await postData(url, data);
-        editID = idthis;
+        localStorage.setItem('editID', idthis);
         window.location.href=url;
         //console.log("initializing edit")
         //document.html=resp;
