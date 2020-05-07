@@ -46,14 +46,15 @@ function editPost(idthis) {
         var url = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
         let data = {id: idthis}
         let resp = await postData(url, data);
-        const j = await resp.json();
+        document.html=resp;
+        //const j = await resp.json();
         console.log("The data is ")
         console.dir(data)
         if (j['result'] !== 'success') {
-            document.getElementById("output").innerHTML = j['result'];
+            //document.getElementById("output").innerHTML = j['result'];
         } else {
-            document.getElementById("output").innerHTML = "success! you can see your post in home page";
-            setTimeout(function(){window.location.href=homeURL}, 1500) 
+            //document.getElementById("output").innerHTML = "success! you can see your post in home page";
+            //setTimeout(function(){window.location.href=homeURL}, 1500) 
         }
     })();
 }
