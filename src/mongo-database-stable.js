@@ -392,10 +392,10 @@ var Database = /** @class */ (function () {
                     case 3:
                         _a.trys.push([3, 5, , 6]);
                         return [4 /*yield*/, collection.findOneAndUpdate({ '_id': post['_id'] }, {
-                                '_id': Date.now().toString(),
-                                'title': post['title'],
-                                'username': post['username'],
-                                'content': post['content']
+                                $set: {
+                                    'title': post['title'],
+                                    'content': post['content']
+                                }
                             })];
                     case 4:
                         result = _a.sent();

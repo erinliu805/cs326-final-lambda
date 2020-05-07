@@ -543,7 +543,7 @@ var MyServer = /** @class */ (function () {
     };
     MyServer.prototype.editPostSubmitHandler = function (request, response, next) {
         return __awaiter(this, void 0, void 0, function () {
-            var data;
+            var data, postData;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -552,6 +552,12 @@ var MyServer = /** @class */ (function () {
                         data = {
                             '_id': request.body.id,
                             'userID': request.user._id,
+                            'username': request.user.username,
+                            'title': request.body.title,
+                            'content': request.body.content
+                        };
+                        postData = {
+                            '_id': request.body.id,
                             'username': request.user.username,
                             'title': request.body.title,
                             'content': request.body.content

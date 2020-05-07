@@ -385,19 +385,17 @@ export class MyServer {
             'title': request.body.title,
             'content': request.body.content,
         };
-        console.log(data);
-        if (data.title == null || data.content == null){
-            response.write(this.failMsg);
-            response.end();
-        }
         let postData = {
             '_id' : request.body.id,
             'username' : request.user.username,
             'title': request.body.title,
             'content': request.body.content
         }
-        // add this post into the database
-        else if(await this.theDatabase.update_post(data)){
+        console.log(data);
+        if (data.title == null || data.content == null){
+            response.write(this.failMsg);
+            response.end();
+        } else if(await this.theDatabase.update_post(data)){
             response.write(this.successMsg);
             response.end();
         } else {
