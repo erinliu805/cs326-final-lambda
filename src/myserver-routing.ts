@@ -93,6 +93,20 @@ export class MyServer {
             next();
         });
 
+        this.router.get('/edit_post', this.isLoggedIn, async (request, response, next) => {
+            if (request.isAuthenticated()){
+                let file_path = path.join(__dirname, 'public/edit_post.html');
+                let data = fs.readFileSync(file_path).toString.replace("REPLACETHISWITHID", request["_id"]);
+                response.header('Content-Type', 'text/html');
+                response.write(data);
+                response.end();
+            }
+            else {
+                response.redirect('/login')
+            }
+            next();
+        });
+
         //TO Do 
         // before go to profile, check if the user log in
         this.router.get('/profile', this.isLoggedIn, async (request, response, next) => {
@@ -175,6 +189,7 @@ export class MyServer {
         
         this.router.post('/register', this.registerHandler.bind(this));
         this.router.post('/create_post', this.isLoggedIn, this.createPostHandler.bind(this));
+        this.router.post('/edit_post_submit', this.isLoggedIn, this.editPostSubmitHandler.bind(this));
         this.router.post('/delete_user', this.isLoggedIn, this.deleteUserHandler.bind(this));
         this.router.post('/profile', this.isLoggedIn, this.profileHandler.bind(this));
         this.router.post('/login', passport.authenticate('local', {}), this.loginHandler.bind(this));
@@ -337,6 +352,32 @@ export class MyServer {
         }
         // add this post into the database
         else if(await this.theDatabase.create_post(data)){
+            response.write(this.successMsg);
+            response.end();
+        } else {
+            response.write(this.failMsg);
+            response.end();
+        }
+        next();
+    }
+
+    private async editPostSubmitHandler(request, response, next){
+        console.log('Create post')
+        console.dir(request.user)
+        let data = {
+            '_id': request.body.id,
+            'userID' : request.user._id,
+            'username': request.user.username,
+            'title': request.body.title,
+            'content': request.body.content,
+        };
+        console.log(data);
+        if (data.title == null || data.content == null){
+            response.write(this.failMsg);
+            response.end();
+        }
+        // add this post into the database
+        else if(await this.theDatabase.update_post(data)){
             response.write(this.successMsg);
             response.end();
         } else {
