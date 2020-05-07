@@ -7,7 +7,7 @@ function generateHTML(author, title, content, time, id) {
     (async () => {
         let response = await fetch(InfoURL);
         let json = await response.json();
-        let editButton = (json['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost()"">Edit</a></li></ul`
+        let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost()"">Edit</a></li></ul`
                 : "";
         let html = `<div class="media content-section">
                     <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
