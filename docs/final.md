@@ -19,6 +19,7 @@
 
 8. ### Database: 
 #### A final up-to-date representation of your database including a brief description of each of the entities in your data model and their relationships if any.
+Our database is powered by MongoDB. It has two collections, one for users and one for posts. Users are stored as documents with a username field, email field, and hashedpassword field. The hashedpassword field stores a hash of the user's password, and is used for authentication purposes by comparing it to the hash of the submitted password. The username and email must be unique (not used by any other user in the database). The post collection stores posts as a document with an _id field, a title field, a content field, and an author field(username of user who submitted the post). The _id of each post is generated as a timestamp from the moment the post was submitted, and is used to identify a post for the delete and update operations. Both users and posts have fully functional CRUD operations, though the read function for posts reads posts from most recent to least recent instead of searching by post ID.
 
 9. ### URL Routes/Mappings: 
 #### A final up-to-date table of all the URL routes that your application supports and a short description of what those routes are used for. You should also indicate any authentication and permissions on those routes.
