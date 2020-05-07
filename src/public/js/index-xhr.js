@@ -3,12 +3,28 @@ const readURL = "https://aqueous-dusk-44841.herokuapp.com/read";
 //const InfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info";
 let page = 0
 
+async function postData(url, data) {
+    const resp = await fetch(url,
+        {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            redirect: 'follow',
+            body: JSON.stringify(data)
+        });
+    return resp;
+}
+
 function generateHTML(author, title, content, time, id) {
     let result = "";
     (async () => {
         let response = await fetch(InfoURL);
         let json = await response.json();
-        let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost(${id.toString()})"">Edit</a></li></ul`
+        let editButton = (json['username'] === author.toString()) ? `<button type="button" class="nav-item active" onclick="editPost(${id.toString()})">Edit</button>`
                 : ``;
         let html = `<div class="media content-section">
                     <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
@@ -25,19 +41,20 @@ function generateHTML(author, title, content, time, id) {
     })();
 }
 
-function editPost(id) {
+function editPost(idthis) {
     (async () => {
-        var form = document.createElement('form');
-        document.body.appendChild(form);
-        form.method = 'post';
-        form.action = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
-        let data = document.getElementById(id);
-        var input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = "_id";
-        input.value = id;
-        form.appendChild(input);
-      form.submit();
+        var url = '"https://aqueous-dusk-44841.herokuapp.com/edit_post"';
+        let data = {id: idthis}
+        let resp = await postData(url, data);
+        const j = await resp.json();
+        console.log("The data is ")
+        console.dir(data)
+        if (j['result'] !== 'success') {
+            document.getElementById("output").innerHTML = j['result'];
+        } else {
+            document.getElementById("output").innerHTML = "success! you can see your post in home page";
+            setTimeout(function(){window.location.href=homeURL}, 1500) 
+        }
     })();
 }
 
