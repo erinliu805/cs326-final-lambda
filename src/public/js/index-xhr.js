@@ -1,15 +1,20 @@
 // const readURL = "http://0.0.0.0:8080/read";
 const readURL = "https://aqueous-dusk-44841.herokuapp.com/read"; 
+const InfoURL = "https://aqueous-dusk-44841.herokuapp.com/get_user_info";
 let page = 0
 
 function generateHTML(author, title, content, time) {
+    let resp = await fetch(InfoURL);
+    let j = await resp.json();
+    let editButton = (j['username'] === author.toString) ? `<ul><li class="nav-item active"><a class="nav-link" href="/edit_post">Edit</a></li></ul`
+            : null;
     let html = `<div class="media content-section">
                 <img src="/images/default.jpg" class="post-img rounded" alt="user-photo"></img>
                 <div class="media-body">
                     <h2 class="mt-0 post-title">${title.toString()}</h2>
                     <h5 class="mt-0">${author.toString()}</h5>
                     <small class="text-muted">${time}</small>
-                    <p class="post-content">${content}</p>
+                    <p class="post-content">${content}</p>` + editButton + `
                 </div>
             </div>
             `
