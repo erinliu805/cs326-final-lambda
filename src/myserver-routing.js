@@ -571,7 +571,7 @@ var MyServer = /** @class */ (function () {
                             '_id': request.body.id
                         };
                         console.log(data);
-                        return [4 /*yield*/, this.theDatabase.create_post(data)];
+                        return [4 /*yield*/, this.theDatabase.delete_post(data)];
                     case 1:
                         // add this post into the database
                         if (_a.sent()) {

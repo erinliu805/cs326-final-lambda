@@ -399,7 +399,7 @@ export class MyServer {
         console.log(data);
         
         // add this post into the database
-        if(await this.theDatabase.create_post(data)){
+        if(await this.theDatabase.delete_post(data)){
             response.write(this.successMsg);
             response.end();
         } else {
