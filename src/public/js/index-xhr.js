@@ -5,9 +5,9 @@ let page = 0
 
 function generateHTML(author, title, content, time, id) {
     let result = "";
-    return (async () => {
-        let response = await fetch(InfoURL);
-        let json = await response.json();
+    return (() => {
+        let response = fetch(InfoURL);
+        let json = response.json();
         let editButton = (json['username'] === author.toString()) ? `<ul><li class="nav-item active"><a class="nav-link" onclick="editPost(${id.toString()})"">Edit</a></li></ul`
                 : ``;
         let html = `<div class="media content-section">
