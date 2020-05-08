@@ -4,7 +4,9 @@
 
 3. ### Semester: Spring 2020
 
-4. ### Overview: A brief overview of your application. This will be based on what you are submitting as your final web application artifact. You should also mention why your application is innovative.
+4. ### Overview: 
+#### Our application is an online forum for Umass students to share their off-campus living experiences. Noticing that as we move to junior and senior year, the demand for living off-campus has grown among our peers. As a community, most of us have no experience of finding a good housing option before, all we can do is just asking friends, and this is not very informative. So we create this forum where everyone can share their experiences of different housing options, depending on the price, location, environment, they can either recommand this to other users or 'warn' them on the other hand. Also they could share their subleasing information and find someone to take care of their leases. Everyone can view posts on this forum. For each user they will need to have a account to create, update, and delete posts. 
+#### Knowing that there are other websites such as Facebook that has the same function as ours, Housing101 is not connected with any other social media account, so user won't be worried about their privacy while creating posts, as the account itself is only for this forum. 
 
 5. ### Team Members: 
 -  #### Juelin Liu: Juelin-Liu
@@ -104,7 +106,18 @@ When the user tries to login, the server tries to find the matched user by email
 In the backend, programmer can user request.user to access the inforamtion of a logged in user, and request.isAutheticated to check if the user has logged in.
 
 11. ### Division of Labor: 
-#### A breakdown of the division of labor for each team member — that is, saying who did what, for the entire project. Remember that everyone is expected to contribute roughly equally to each phase of the project. We expect to see similar numbers and kinds of GitHub commits by each student.
+#### Milestone 1:
+-  #### Juelin Liu: Juelin-Liu
+- #### Alex Zhang: alexander-x-zhang
+- #### Erin(Yuxin) Liu: wrote html for login, register, profile.
+#### Milestone 2:
+-  #### Juelin Liu: Juelin-Liu
+- #### Alex Zhang: alexander-x-zhang
+- #### Erin(Yuxin) Liu: 
+#### Milestone 3:
+-  #### Juelin Liu: Juelin-Liu
+- #### Alex Zhang: alexander-x-zhang
+- #### Erin(Yuxin) Liu: 
 
 12. ### Conclusion:
 #### A conclusion describing your team’s experience in working on this project. This should include what you learned through the design and implementation process, the difficulties you encountered, what your team would have liked to know before starting the project that would have helped you later, and any other technical hurdles that your team encountered.
