@@ -108,17 +108,18 @@ In the backend, programmer can user request.user to access the inforamtion of a 
 11. ### Division of Labor: 
 #### Milestone 1:
 -  #### Juelin Liu: Juelin-Liu
-- #### Alex Zhang: alexander-x-zhang
+- #### Alex Zhang: alexander-x-zhang - html for posts, part of index
 - #### Erin(Yuxin) Liu: wrote html for login, register, profile.
 #### Milestone 2:
 -  #### Juelin Liu: Juelin-Liu
-- #### Alex Zhang: alexander-x-zhang
+- #### Alex Zhang: alexander-x-zhang - beginning of server structure (not too sure when exactly milestone 2 was)
 - #### Erin(Yuxin) Liu: 
 #### Milestone 3:
 -  #### Juelin Liu: Juelin-Liu
-- #### Alex Zhang: alexander-x-zhang
+- #### Alex Zhang: alexander-x-zhang - post edit/delete, part of db structure/server routing
 - #### Erin(Yuxin) Liu: 
 
 12. ### Conclusion:
 #### A conclusion describing your team’s experience in working on this project. This should include what you learned through the design and implementation process, the difficulties you encountered, what your team would have liked to know before starting the project that would have helped you later, and any other technical hurdles that your team encountered.
+Alexander Zhang - making things look nice was surprisingly hard. Getting the client and server to communicate was also difficult, mainly due to the small details and differences. I wish we saw more examples of web server architecture before we started coding it properly.
 
