@@ -107,19 +107,20 @@ In the backend, programmer can user request.user to access the inforamtion of a 
 
 11. ### Division of Labor: 
 #### Milestone 1:
--  #### Juelin Liu: Juelin-Liu
+-  #### Juelin Liu: Juelin-Liu - Design home page, register page, login page, and create_post page and associated routers with various handlers. Design and implement router logic and structure
 - #### Alex Zhang: alexander-x-zhang - html for posts, part of index
 - #### Erin(Yuxin) Liu: wrote html for login, register, profile.
 #### Milestone 2:
--  #### Juelin Liu: Juelin-Liu
+-  #### Juelin Liu: Juelin-Liu - Design database structure, including how user and post can be add, updated, and deleted. Trying to find a way to authenticate user without storing plain password into database
 - #### Alex Zhang: alexander-x-zhang - beginning of server structure (not too sure when exactly milestone 2 was)
-- #### Erin(Yuxin) Liu: 
+- #### Erin(Yuxin) Liu: wrote part of login-xhr, register-xhr, profile-xhr, and some database codes
 #### Milestone 3:
--  #### Juelin Liu: Juelin-Liu
+-  #### Juelin Liu: Juelin-Liu - Implement user authentication. Add new routers to allow user make a post after login. Modify frontend xhr code, so the return message from server can be displayed
 - #### Alex Zhang: alexander-x-zhang - post edit/delete, part of db structure/server routing
-- #### Erin(Yuxin) Liu: 
+- #### Erin(Yuxin) Liu: wrote profile handler, update and delete user in routing
 
 12. ### Conclusion:
-#### A conclusion describing your team’s experience in working on this project. This should include what you learned through the design and implementation process, the difficulties you encountered, what your team would have liked to know before starting the project that would have helped you later, and any other technical hurdles that your team encountered.
-Alexander Zhang - making things look nice was surprisingly hard. Getting the client and server to communicate was also difficult, mainly due to the small details and differences. I wish we saw more examples of web server architecture before we started coding it properly.
+#### Alexander Zhang - making things look nice was surprisingly hard. Getting the client and server to communicate was also difficult, mainly due to the small details and differences. I wish we saw more examples of web server architecture before we started coding it properly.
+#### Juelin Liu - future work: Add directy message channel between author and other user, so they can have a private conversation
+#### Erin Liu - future work: adding features so that user could post picture as well. Figure out routing was very challenging, and interesting point is where each user could see individually page right bar "welcome username", that's cute.
 
