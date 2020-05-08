@@ -1,5 +1,12 @@
 VIDEO LINK: https://drive.google.com/file/d/1CZIMFt8A-CA3Rydd6kLS0bxWTsuveqqb/view?usp=sharing
 
+HOW TO SET UP:
+There are four env variables need to be set on heroku:
+URI= //database uri for mangodb
+USERNAME= //username for mangodb
+PASSWORD= //password for mangodb
+SESSION_SECRET = //a random string for encryption
+
 1. ### Title: Lambda
 
 2. ### Subtitle: Housing101
