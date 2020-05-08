@@ -328,6 +328,8 @@ export class MyServer {
         try {
                 let result = await this.theDatabase.update_user(update_user);
                 console.log(result);
+                request.logout();
+                response.redirect('/login')
                 response.write(this.successMsg);
                 response.end();
         } catch (error) {
